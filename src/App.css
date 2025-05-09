@@ -1,5 +1,4 @@
 .App {
-  border: 1px solid red;
   text-align: center;
 }
 
@@ -36,4 +35,13 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.dnd-context-container {
+  border: 1px solid red;
+}
+
+.dnd-container {
+  border: 2px dashed blue;
+  padding: 3px;
 }
