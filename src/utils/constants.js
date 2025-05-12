@@ -1,4 +1,4 @@
-export const TIMEOUT = 200;
+export const TIMEOUT = 0;
 
 export const dragItemsArray = [
     "Item 1",
