@@ -100,7 +100,7 @@ export default function DragNDrop() {
                         <SortableItem key={id} id={id} activeId={activeId} dummy={dummy} />
                     ))}
                 </SortableContext>
-                <DragOverlay modifiers={[snapHandleToCursor]}>
+                <DragOverlay modifiers={[]}>
                     {activeId ? <SortableItem id={activeId} activeId={activeId} /> : null}
                 </DragOverlay>
             </>
