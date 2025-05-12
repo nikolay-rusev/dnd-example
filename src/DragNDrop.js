@@ -4,26 +4,39 @@ import { arrayMove, SortableContext, useSortable } from "@dnd-kit/sortable";
 import { snapCenterToCursor } from "@dnd-kit/modifiers";
 
 function SortableItem({ id, activeId }) {
-    const { attributes, listeners, setNodeRef, transform } = useSortable({ id });
+    const { attributes, setNodeRef, transform, listeners } = useSortable({ id });
 
     return (
         <div
             ref={setNodeRef}
-            {...listeners}
             {...attributes}
             style={{
                 width: activeId ? 100 : 150, // Shrinks when dragging starts
                 height: activeId ? 30 : 50,
                 marginBottom: 8,
                 background: "lightblue",
-                opacity: activeId ? 0.5 : 1, // Fades out slightly
+                opacity: activeId ? 0.5 : 1,
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center",
+                justifyContent: "space-between", // Adjusted for drag handle placement
+                padding: "5px",
                 transform: `translate(${transform?.x ?? 0}px, ${transform?.y ?? 0}px)`,
                 transition: "all 0.2s ease"
             }}
         >
+            {/* Drag Handle */}
+            <div
+                {...listeners}
+                style={{
+                    cursor: "grab",
+                    padding: "5px",
+                    background: "darkblue",
+                    color: "white",
+                    borderRadius: "4px"
+                }}
+            >
+                ☰
+            </div>
             {id}
         </div>
     );
@@ -50,6 +63,7 @@ export default function DragNDrop() {
 
         // Capture the original container height
         const initialHeight = containerRef.current.offsetHeight;
+        setActiveId(event.active.id);
 
         // Get the context container height after shrinking (assuming transitions complete)
         setTimeout(() => {
@@ -66,14 +80,16 @@ export default function DragNDrop() {
             setTopFillHeight(leftoverHeight * proportion);
             setBottomFillHeight(leftoverHeight * (1 - proportion));
         }, 200); // Ensuring transition has completed
-
-        setActiveId(event.active.id);
     };
 
     const handleDragEnd = (event) => {
         setActiveId(null);
-        setTopFillHeight(0);
-        setBottomFillHeight(0);
+
+        // Smooth reset of fill heights
+        setTimeout(() => {
+            setTopFillHeight(0);
+            setBottomFillHeight(0);
+        }, 200);
 
         if (event.over) {
             setItems((prev) =>
@@ -83,9 +99,12 @@ export default function DragNDrop() {
     };
 
     return (
-        <div className="dnd-container" ref={containerRef} style={{ height: "auto" }}>
-            <div className="top-fill" style={{ height: topFillHeight }}></div>
-            <div className="dnd-context-container" id={"dnd-context-container"}>
+        <div className="dnd-container" ref={containerRef} style={{ position: "relative" }}>
+            <div
+                className="top-fill"
+                style={{ height: topFillHeight, transition: "height 0.2s ease" }}
+            ></div>
+            <div className="dnd-context-container" id="dnd-context-container">
                 <DndContext
                     collisionDetection={pointerWithin}
                     onDragStart={handleDragStart}
@@ -97,12 +116,15 @@ export default function DragNDrop() {
                         ))}
                     </SortableContext>
 
-                    <DragOverlay modifiers={[snapCenterToCursor]}>
+                    <DragOverlay>
                         {activeId ? <SortableItem id={activeId} activeId={activeId} /> : null}
                     </DragOverlay>
                 </DndContext>
             </div>
-            <div className="bottom-fill" style={{ height: bottomFillHeight }}></div>
+            <div
+                className="bottom-fill"
+                style={{ height: bottomFillHeight, transition: "height 0.2s ease" }}
+            ></div>
         </div>
     );
 }
