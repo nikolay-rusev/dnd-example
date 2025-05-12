@@ -109,11 +109,8 @@ export default function DragNDrop() {
 
     return (
         <div className="dnd-container" ref={containerRef} style={{ position: "relative" }}>
-            <div
-                className="top-fill"
-                style={{ height: topFillHeight, transition: "height 0.1s ease" }}
-            ></div>
-            <div className="dnd-context-container" id="dnd-context-container">
+            <div className="top-fill" style={{ height: topFillHeight }}></div>
+            <div id="dnd-context-container" className="dnd-context-container">
                 <div>
                     <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
                         {children}
@@ -123,10 +120,7 @@ export default function DragNDrop() {
                     {dummyChildren}
                 </div>
             </div>
-            <div
-                className="bottom-fill"
-                style={{ height: bottomFillHeight, transition: "height 0.1s ease" }}
-            ></div>
+            <div className="bottom-fill" style={{ height: bottomFillHeight }}></div>
         </div>
     );
 }
