@@ -25,19 +25,27 @@ const dragHandleStyle = {
     borderRadius: "4px"
 };
 
+const defaultItemStyle = {
+    marginBottom: 8,
+    background: "lightblue",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between", // Adjusted for drag handle placement
+    padding: "5px",
+    transition: "height 0.2s ease",
+    width: 150,
+    height: 50,
+    opacity: 1,
+    transform: `translate(0px, 0px)`
+};
+
 function calcItemStyle({ activeId, transform }) {
     return {
-        width: activeId ? 100 : 150, // Shrinks when dragging starts
+        ...defaultItemStyle,
+        width: activeId ? 100 : 150,
         height: activeId ? 30 : 50,
-        marginBottom: 8,
-        background: "lightblue",
         opacity: activeId ? 0.5 : 1,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between", // Adjusted for drag handle placement
-        padding: "5px",
-        transform: `translate(${transform?.x ?? 0}px, ${transform?.y ?? 0}px)`,
-        transition: "height 0.2s ease"
+        transform: `translate(${transform?.x ?? 0}px, ${transform?.y ?? 0}px)`
     };
 }
 
