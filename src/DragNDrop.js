@@ -7,7 +7,8 @@ import {
     dragHandleStyle,
     defaultItemStyle,
     dummyItemStyle,
-    dummyContainerStyle
+    dummyContainerStyle,
+    TIMEOUT_SCROLL
 } from "./utils/constants";
 
 function calcItemStyle({ activeId, transform, last }) {
@@ -52,7 +53,7 @@ export default function DragNDrop() {
                 behavior: "smooth",
                 block: "center"
             });
-        }, 200); // Slight delay to allow transition
+        }, TIMEOUT_SCROLL); // Slight delay to allow transition
     };
 
     const resetFillHeights = () => {
