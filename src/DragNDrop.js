@@ -111,12 +111,21 @@ export default function DragNDrop() {
         <div className="dnd-container" ref={containerRef} style={{ position: "relative" }}>
             <div className="top-fill" style={{ height: topFillHeight }}></div>
             <div id="dnd-context-container" className="dnd-context-container">
-                <div>
+                <div className="actual-container" style={{ position: "relative" }}>
                     <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
                         {children}
                     </DndContext>
                 </div>
-                <div id="dummy-container" style={{ visibility: "hidden", position: "absolute" }}>
+                <div
+                    id="dummy-container"
+                    style={{
+                        visibility: "hidden",
+                        zIndex: -1,
+                        position: "absolute",
+                        top: 0,
+                        left: 0
+                    }}
+                >
                     {dummyChildren}
                 </div>
             </div>
