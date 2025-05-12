@@ -9,3 +9,8 @@
 .dnd-container {
     border: 2px dashed blue;
 }
+
+.top-fill, .bottom-fill {
+    background-color: palevioletred;
+    opacity: 0.3;
+}
