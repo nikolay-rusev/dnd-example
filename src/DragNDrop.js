@@ -1,7 +1,6 @@
 import React, { useState, useRef } from "react";
 import { DndContext, DragOverlay } from "@dnd-kit/core";
 import { arrayMove, SortableContext, useSortable } from "@dnd-kit/sortable";
-import { snapHandleToCursor } from "./utils/snapHandleToCursor";
 import {
     TIMEOUT,
     dragItemsArray,
@@ -11,20 +10,21 @@ import {
     dummyContainerStyle
 } from "./utils/constants";
 
-function calcItemStyle({ activeId, transform }) {
+function calcItemStyle({ activeId, transform, last }) {
     return {
         ...defaultItemStyle,
         width: activeId ? 100 : 150,
         height: activeId ? 30 : 50,
         opacity: activeId ? 0.5 : 1,
-        transform: `translate(${transform?.x ?? 0}px, ${transform?.y ?? 0}px)`
+        transform: `translate(${transform?.x ?? 0}px, ${transform?.y ?? 0}px)`,
+        marginBottom: last ? 0 : 8
     };
 }
 
-function SortableItem({ id, activeId, dummy }) {
+function SortableItem({ id, activeId, dummy, last }) {
     const { attributes, setNodeRef, transform, listeners } = useSortable({ id });
 
-    const itemStyle = dummy ? dummyItemStyle : calcItemStyle({ activeId, transform });
+    const itemStyle = dummy ? dummyItemStyle : calcItemStyle({ activeId, transform, last });
 
     const dragItemId = dummy ? null : `drag-item-${id}`;
 
@@ -44,13 +44,6 @@ export default function DragNDrop() {
     const containerRef = useRef(null);
     const [topFillHeight, setTopFillHeight] = useState(0);
     const [bottomFillHeight, setBottomFillHeight] = useState(0);
-
-    const scrollActiveElementIntoView = (id) => {
-        document.querySelector(`[data-id=drag-item-${id}]`)?.scrollIntoView({
-            behavior: "smooth",
-            block: "center"
-        });
-    };
 
     const scrollAfterDragEnd = (event) => {
         // Scroll to the final position
@@ -90,8 +83,6 @@ export default function DragNDrop() {
 
             setTopFillHeight(leftoverHeight * proportion);
             setBottomFillHeight(leftoverHeight * (1 - proportion));
-
-            // scrollActiveElementIntoView(event.active.id);
         }, TIMEOUT); // Ensuring transition has completed
     };
 
@@ -122,8 +113,14 @@ export default function DragNDrop() {
         return (
             <>
                 <SortableContext items={items}>
-                    {items.map((id) => (
-                        <SortableItem key={id} id={id} activeId={activeId} dummy={dummy} />
+                    {items.map((id, index) => (
+                        <SortableItem
+                            key={id}
+                            id={id}
+                            activeId={activeId}
+                            dummy={dummy}
+                            last={index === items.length - 1}
+                        />
                     ))}
                 </SortableContext>
                 <DragOverlay modifiers={[]}>
