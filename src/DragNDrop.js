@@ -92,13 +92,14 @@ export default function DragNDrop() {
                         <SortableItem key={id} id={id} activeId={activeId} />
                     ))}
                 </SortableContext>
-
                 <DragOverlay>
                     {activeId ? <SortableItem id={activeId} activeId={activeId} /> : null}
                 </DragOverlay>
             </>
         );
     };
+
+    const children = getDraggableItems({ activeId, items });
 
     return (
         <div className="dnd-container" ref={containerRef} style={{ position: "relative" }}>
@@ -108,8 +109,9 @@ export default function DragNDrop() {
             ></div>
             <div className="dnd-context-container" id="dnd-context-container">
                 <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-                    {getDraggableItems({ activeId, items })}
+                    {children}
                 </DndContext>
+                <div style={{ visibility: "hidden", position: "absolute" }}>{children}</div>
             </div>
             <div
                 className="bottom-fill"
