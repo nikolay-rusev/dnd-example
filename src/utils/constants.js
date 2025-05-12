@@ -20,8 +20,8 @@ export const dummyContainerStyle = {
     zIndex: -1,
     position: "absolute",
     top: 0,
-    left: 0
-}
+    right: 0
+};
 
 export const dragHandleStyle = {
     cursor: "grab",
@@ -38,7 +38,7 @@ export const defaultItemStyle = {
     alignItems: "center",
     justifyContent: "space-between", // Adjusted for drag handle placement
     padding: "5px",
-    transition: "height 0.2s ease",
+    transition: "all 0.2s ease",
     width: 150,
     height: 50,
     opacity: 1,
@@ -48,7 +48,5 @@ export const defaultItemStyle = {
 export const dummyItemStyle = {
     ...defaultItemStyle,
     width: 100,
-    height: 30,
-    opacity: 1,
-    transform: `translate(0px, 0px)`
-}
+    height: 30
+};
