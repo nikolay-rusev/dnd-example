@@ -33,7 +33,7 @@ function SortableItem({ id, activeId, dummy, last }) {
             <div {...listeners} className={"drag-handle"} style={dragHandleStyle}>
                 ☰
             </div>
-            Item {id}
+            Step {id}
         </div>
     );
 }
