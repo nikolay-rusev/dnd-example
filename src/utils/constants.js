@@ -36,3 +36,11 @@ export const defaultItemStyle = {
     opacity: 1,
     transform: `translate(0px, 0px)`
 };
+
+export const dummyItemStyle = {
+    ...defaultItemStyle,
+    width: 100,
+    height: 30,
+    opacity: 1,
+    transform: `translate(0px, 0px)`
+}
