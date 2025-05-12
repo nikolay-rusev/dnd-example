@@ -1,7 +1,13 @@
 import React, { useState, useRef } from "react";
 import { DndContext, DragOverlay } from "@dnd-kit/core";
 import { arrayMove, SortableContext, useSortable } from "@dnd-kit/sortable";
-import { TIMEOUT, dragItemsArray, dragHandleStyle, defaultItemStyle } from "./utils/constants";
+import {
+    TIMEOUT,
+    dragItemsArray,
+    dragHandleStyle,
+    defaultItemStyle,
+    dummyItemStyle
+} from "./utils/constants";
 
 function calcItemStyle({ activeId, transform }) {
     return {
@@ -13,10 +19,10 @@ function calcItemStyle({ activeId, transform }) {
     };
 }
 
-function SortableItem({ id, activeId }) {
+function SortableItem({ id, activeId, dummy }) {
     const { attributes, setNodeRef, transform, listeners } = useSortable({ id });
 
-    const itemStyle = calcItemStyle({ activeId, transform });
+    const itemStyle = dummy ? dummyItemStyle : calcItemStyle({ activeId, transform });
 
     return (
         <div ref={setNodeRef} {...attributes} style={itemStyle}>
@@ -48,8 +54,7 @@ export default function DragNDrop() {
 
         // Get the context container height after shrinking (assuming transitions complete)
         setTimeout(() => {
-            const contextHeight =
-                document.getElementById("dnd-context-container")?.offsetHeight || 0;
+            const contextHeight = document.getElementById("dummy-container")?.offsetHeight || 0;
 
             // Calculate remaining space
             const leftoverHeight = initialHeight - contextHeight;
@@ -84,12 +89,12 @@ export default function DragNDrop() {
         }
     };
 
-    const getDraggableItems = ({ activeId, items }) => {
+    const getDraggableItems = ({ activeId, items, dummy = false }) => {
         return (
             <>
                 <SortableContext items={items}>
                     {items.map((id) => (
-                        <SortableItem key={id} id={id} activeId={activeId} />
+                        <SortableItem key={id} id={id} activeId={activeId} dummy={dummy} />
                     ))}
                 </SortableContext>
                 <DragOverlay>
@@ -100,22 +105,27 @@ export default function DragNDrop() {
     };
 
     const children = getDraggableItems({ activeId, items });
+    const dummyChildren = getDraggableItems({ activeId, items, dummy: true });
 
     return (
         <div className="dnd-container" ref={containerRef} style={{ position: "relative" }}>
             <div
                 className="top-fill"
-                style={{ height: topFillHeight, transition: "height 0.2s ease" }}
+                style={{ height: topFillHeight, transition: "height 0.1s ease" }}
             ></div>
             <div className="dnd-context-container" id="dnd-context-container">
-                <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-                    {children}
-                </DndContext>
-                <div style={{ visibility: "hidden", position: "absolute" }}>{children}</div>
+                <div>
+                    <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+                        {children}
+                    </DndContext>
+                </div>
+                <div id="dummy-container" style={{ visibility: "hidden", position: "absolute" }}>
+                    {dummyChildren}
+                </div>
             </div>
             <div
                 className="bottom-fill"
-                style={{ height: bottomFillHeight, transition: "height 0.2s ease" }}
+                style={{ height: bottomFillHeight, transition: "height 0.1s ease" }}
             ></div>
         </div>
     );
