@@ -67,7 +67,7 @@ export default function DragNDrop() {
         setTimeout(() => {
             setTopFillHeight(0);
             setBottomFillHeight(0);
-        }, 200);
+        }, 300);
     };
 
     const handleDragStart = (event) => {
@@ -92,7 +92,7 @@ export default function DragNDrop() {
 
             setTopFillHeight(leftoverHeight * proportion);
             setBottomFillHeight(leftoverHeight * (1 - proportion));
-        }, 200); // Ensuring transition has completed
+        }, 300); // Ensuring transition has completed
     };
 
     const handleDragEnd = (event) => {
