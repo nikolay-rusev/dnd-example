@@ -55,6 +55,7 @@ export default function DragNDrop() {
     ]);
     const [activeId, setActiveId] = useState(null);
     const containerRef = useRef(null);
+    const contextRef = useRef(null);
     const [topFillHeight, setTopFillHeight] = useState(0);
     const [bottomFillHeight, setBottomFillHeight] = useState(0);
 
@@ -63,12 +64,13 @@ export default function DragNDrop() {
 
         // Capture the original container height
         const initialHeight = containerRef.current.offsetHeight;
+        // const initialHeight = containerRef.current.getBoundingClientRect().height;
         setActiveId(event.active.id);
 
         // Get the context container height after shrinking (assuming transitions complete)
         setTimeout(() => {
-            const contextHeight =
-                document.getElementById("dnd-context-container")?.offsetHeight || 0;
+            const contextHeight = contextRef.current?.offsetHeight || 0;
+            // const contextHeight = contextRef.current?.getBoundingClientRect().height || 0;
 
             // Calculate remaining space
             const leftoverHeight = initialHeight - contextHeight;
@@ -99,12 +101,12 @@ export default function DragNDrop() {
     };
 
     return (
-        <div className="dnd-container" ref={containerRef} style={{ position: "relative" }}>
+        <div ref={containerRef} className="dnd-container" style={{ position: "relative" }}>
             <div
                 className="top-fill"
                 style={{ height: topFillHeight, transition: "height 0.2s ease" }}
             ></div>
-            <div className="dnd-context-container" id="dnd-context-container">
+            <div ref={contextRef} className="dnd-context-container">
                 <DndContext
                     collisionDetection={pointerWithin}
                     onDragStart={handleDragStart}
