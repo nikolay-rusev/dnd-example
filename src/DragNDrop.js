@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import { DndContext, DragOverlay } from "@dnd-kit/core";
 import { arrayMove, SortableContext, useSortable } from "@dnd-kit/sortable";
+import { snapHandleToCursor } from "./utils/snapHandleToCursor";
 import {
     TIMEOUT,
     dragItemsArray,
@@ -62,9 +63,7 @@ export default function DragNDrop() {
             const leftoverHeight = initialHeight - contextHeight;
 
             // Distribute space based on mouse Y position
-            const mouseY =
-                event.active?.rect.current.translated.top -
-                    event.active?.rect.current.translated.height / 2 || 0;
+            const mouseY = event.active?.rect.current.translated.top || 0;
             const proportion = mouseY / initialHeight;
 
             setTopFillHeight(leftoverHeight * proportion);
@@ -101,7 +100,7 @@ export default function DragNDrop() {
                         <SortableItem key={id} id={id} activeId={activeId} dummy={dummy} />
                     ))}
                 </SortableContext>
-                <DragOverlay>
+                <DragOverlay modifiers={[snapHandleToCursor]}>
                     {activeId ? <SortableItem id={activeId} activeId={activeId} /> : null}
                 </DragOverlay>
             </>
