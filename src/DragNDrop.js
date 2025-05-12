@@ -62,10 +62,11 @@ export default function DragNDrop() {
             // Calculate remaining space
             const leftoverHeight = initialHeight - contextHeight;
 
-            // Distribute space based on mouse Y position
-            const mouseY =
-                event.active?.rect.current.translated.top -
-                    event.active?.rect.current.translated.height / 2 || 0;
+            // Adjust mouse Y based on scrolling
+            const scrollOffset = window.scrollY;
+
+            const mouseY = event.active?.rect.current.translated.top + scrollOffset || 0;
+
             const proportion = mouseY / initialHeight;
 
             setTopFillHeight(leftoverHeight * proportion);
