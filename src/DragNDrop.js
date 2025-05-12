@@ -114,7 +114,7 @@ export default function DragNDrop() {
                 arrayMove(prev, prev.indexOf(event.active.id), prev.indexOf(event.over.id))
             );
 
-            // scrollAfterDragEnd(event);
+            scrollAfterDragEnd(event);
         }
     };
 
