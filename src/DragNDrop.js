@@ -2,39 +2,53 @@ import React, { useState, useRef } from "react";
 import { DndContext, DragOverlay, pointerWithin } from "@dnd-kit/core";
 import { arrayMove, SortableContext, useSortable } from "@dnd-kit/sortable";
 
+const dragItemsArray = [
+    "Item 1",
+    "Item 2",
+    "Item 3",
+    "Item 4",
+    "Item 5",
+    "Item 6",
+    "Item 7",
+    "Item 8",
+    "Item 9",
+    "Item 10",
+    "Item 11",
+    "Item 12"
+];
+
+const dragHandleStyle = {
+    cursor: "grab",
+    padding: "5px",
+    background: "darkblue",
+    color: "white",
+    borderRadius: "4px"
+};
+
+function calcItemStyle({ activeId, transform }) {
+    return {
+        width: activeId ? 100 : 150, // Shrinks when dragging starts
+        height: activeId ? 30 : 50,
+        marginBottom: 8,
+        background: "lightblue",
+        opacity: activeId ? 0.5 : 1,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between", // Adjusted for drag handle placement
+        padding: "5px",
+        transform: `translate(${transform?.x ?? 0}px, ${transform?.y ?? 0}px)`,
+        transition: "all 0.2s ease"
+    };
+}
+
 function SortableItem({ id, activeId }) {
     const { attributes, setNodeRef, transform, listeners } = useSortable({ id });
 
+    const itemStyle = calcItemStyle({ activeId, transform });
+
     return (
-        <div
-            ref={setNodeRef}
-            {...attributes}
-            style={{
-                width: activeId ? 100 : 150, // Shrinks when dragging starts
-                height: activeId ? 30 : 50,
-                marginBottom: 8,
-                background: "lightblue",
-                opacity: activeId ? 0.5 : 1,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between", // Adjusted for drag handle placement
-                padding: "5px",
-                transform: `translate(${transform?.x ?? 0}px, ${transform?.y ?? 0}px)`,
-                transition: "all 0.2s ease"
-            }}
-        >
-            {/* Drag Handle */}
-            <div
-                {...listeners}
-                className={"drag-handle"}
-                style={{
-                    cursor: "grab",
-                    padding: "5px",
-                    background: "darkblue",
-                    color: "white",
-                    borderRadius: "4px"
-                }}
-            >
+        <div ref={setNodeRef} {...attributes} style={itemStyle}>
+            <div {...listeners} className={"drag-handle"} style={dragHandleStyle}>
                 ☰
             </div>
             {id}
@@ -43,31 +57,26 @@ function SortableItem({ id, activeId }) {
 }
 
 export default function DragNDrop() {
-    const [items, setItems] = useState([
-        "Item 1",
-        "Item 2",
-        "Item 3",
-        "Item 4",
-        "Item 5",
-        "Item 6",
-        "Item 7",
-        "Item 8",
-        "Item 9",
-        "Item 10",
-        "Item 11",
-        "Item 12"
-    ]);
+    const [items, setItems] = useState(dragItemsArray);
     const [activeId, setActiveId] = useState(null);
     const containerRef = useRef(null);
     const [topFillHeight, setTopFillHeight] = useState(0);
     const [bottomFillHeight, setBottomFillHeight] = useState(0);
 
+    const resetFillHeights = () => {
+        setTimeout(() => {
+            setTopFillHeight(0);
+            setBottomFillHeight(0);
+        }, 200);
+    };
+
     const handleDragStart = (event) => {
         if (!containerRef.current) return;
 
+        setActiveId(event.active.id);
+
         // Capture the original container height
         const initialHeight = containerRef.current.offsetHeight;
-        setActiveId(event.active.id);
 
         // Get the context container height after shrinking (assuming transitions complete)
         setTimeout(() => {
@@ -90,10 +99,7 @@ export default function DragNDrop() {
         setActiveId(null);
 
         // Smooth reset of fill heights
-        setTimeout(() => {
-            setTopFillHeight(0);
-            setBottomFillHeight(0);
-        }, 200);
+        resetFillHeights();
 
         if (event.over) {
             setItems((prev) =>
