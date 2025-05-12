@@ -1,7 +1,6 @@
 import React, { useState, useRef } from "react";
 import { DndContext, DragOverlay, pointerWithin } from "@dnd-kit/core";
 import { arrayMove, SortableContext, useSortable } from "@dnd-kit/sortable";
-import { snapCenterToCursor } from "@dnd-kit/modifiers";
 
 function SortableItem({ id, activeId }) {
     const { attributes, setNodeRef, transform, listeners } = useSortable({ id });
@@ -27,6 +26,7 @@ function SortableItem({ id, activeId }) {
             {/* Drag Handle */}
             <div
                 {...listeners}
+                className={"drag-handle"}
                 style={{
                     cursor: "grab",
                     padding: "5px",
