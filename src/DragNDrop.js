@@ -51,17 +51,20 @@ export default function DragNDrop() {
 
     const calculateFillHeights = ({ event }) => {
         // Capture the original container height
-        const initialHeight = containerRef.current.offsetHeight;
+        const initialHeight = containerRef.current.getBoundingClientRect().height;
 
         // Get the context container height after shrinking (assuming transitions complete)
         setTimeout(() => {
-            const contextHeight = document.getElementById("dummy-container")?.offsetHeight || 0;
+            const contextHeight =
+                document.getElementById("dummy-container")?.getBoundingClientRect().height || 0;
 
             // Calculate remaining space
             const leftoverHeight = initialHeight - contextHeight;
 
             // Distribute space based on mouse Y position
-            const mouseY = event.active?.rect.current.translated.top || 0;
+            const mouseY =
+                event.active?.rect.current.translated.top -
+                    event.active?.rect.current.translated.height / 2 || 0;
             const proportion = mouseY / initialHeight;
 
             setTopFillHeight(leftoverHeight * proportion);
