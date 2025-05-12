@@ -101,10 +101,10 @@ export default function DragNDrop() {
         // Smooth reset of fill heights
         resetFillHeights();
 
-        if (event.over) {
-            setItems((prev) =>
-                arrayMove(prev, prev.indexOf(event.active.id), prev.indexOf(event.over.id))
-            );
+        const { active, over } = event;
+
+        if (over) {
+            setItems((prev) => arrayMove(prev, prev.indexOf(active.id), prev.indexOf(over.id)));
 
             scrollAfterDragEnd(event);
         }
