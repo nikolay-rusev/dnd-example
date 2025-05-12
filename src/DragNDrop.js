@@ -1,43 +1,7 @@
 import React, { useState, useRef } from "react";
-import { DndContext, DragOverlay, pointerWithin } from "@dnd-kit/core";
+import { DndContext, DragOverlay } from "@dnd-kit/core";
 import { arrayMove, SortableContext, useSortable } from "@dnd-kit/sortable";
-
-const dragItemsArray = [
-    "Item 1",
-    "Item 2",
-    "Item 3",
-    "Item 4",
-    "Item 5",
-    "Item 6",
-    "Item 7",
-    "Item 8",
-    "Item 9",
-    "Item 10",
-    "Item 11",
-    "Item 12"
-];
-
-const dragHandleStyle = {
-    cursor: "grab",
-    padding: "5px",
-    background: "darkblue",
-    color: "white",
-    borderRadius: "4px"
-};
-
-const defaultItemStyle = {
-    marginBottom: 8,
-    background: "lightblue",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between", // Adjusted for drag handle placement
-    padding: "5px",
-    transition: "height 0.2s ease",
-    width: 150,
-    height: 50,
-    opacity: 1,
-    transform: `translate(0px, 0px)`
-};
+import { TIMEOUT, dragItemsArray, dragHandleStyle, defaultItemStyle } from "./utils/constants";
 
 function calcItemStyle({ activeId, transform }) {
     return {
@@ -75,14 +39,10 @@ export default function DragNDrop() {
         setTimeout(() => {
             setTopFillHeight(0);
             setBottomFillHeight(0);
-        }, 300);
+        }, TIMEOUT);
     };
 
-    const handleDragStart = (event) => {
-        if (!containerRef.current) return;
-
-        setActiveId(event.active.id);
-
+    const calculateFillHeights = ({ event }) => {
         // Capture the original container height
         const initialHeight = containerRef.current.offsetHeight;
 
@@ -100,7 +60,15 @@ export default function DragNDrop() {
 
             setTopFillHeight(leftoverHeight * proportion);
             setBottomFillHeight(leftoverHeight * (1 - proportion));
-        }, 300); // Ensuring transition has completed
+        }, TIMEOUT); // Ensuring transition has completed
+    };
+
+    const handleDragStart = (event) => {
+        if (!containerRef.current) return;
+
+        setActiveId(event.active.id);
+
+        calculateFillHeights({ event });
     };
 
     const handleDragEnd = (event) => {
