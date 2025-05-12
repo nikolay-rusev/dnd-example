@@ -3,14 +3,17 @@
 }
 
 .actual-container {
-    border: 1px solid red;
+    background-color: aliceblue;
+    opacity: 0.9;
 }
 
 .dnd-container {
-    border: 2px dashed blue;
+    background-color: aquamarine;
+    opacity: 0.9;
 }
 
-.top-fill, .bottom-fill {
+.top-fill,
+.bottom-fill {
     background-color: palevioletred;
     opacity: 0.3;
 }
