@@ -1,10 +1,5 @@
 import { getEventCoordinates } from "@dnd-kit/utilities";
 
-/**
- * Modifier function to snap the drag handle directly under the cursor.
- * @param {Object} params - DndKit modifier parameters
- * @returns {Object} Updated transform object
- */
 export const snapHandleToCursor = ({ activatorEvent, draggingNodeRect, transform }) => {
     if (draggingNodeRect && activatorEvent) {
         const activatorCoordinates = getEventCoordinates(activatorEvent);
@@ -12,22 +7,23 @@ export const snapHandleToCursor = ({ activatorEvent, draggingNodeRect, transform
             return transform;
         }
 
-        // Get the handle's bounding rect
+        // Ensure the target is the drag handle
         const handleElement = activatorEvent.target;
         if (!handleElement || !handleElement.classList.contains("drag-handle")) {
-            return transform; // Ensure we're working with the handle
+            return transform;
         }
 
+        // Get handle position and size
         const handleRect = handleElement.getBoundingClientRect();
 
-        // Calculate the offset based on handle position rather than the whole element
-        const offsetX = activatorCoordinates.x - handleRect.left;
-        const offsetY = activatorCoordinates.y - handleRect.top;
+        // Calculate the offsets to center the handle on the cursor
+        const offsetX = activatorCoordinates.x - handleRect.left - handleRect.width / 2;
+        const offsetY = activatorCoordinates.y - handleRect.top - handleRect.height / 2;
 
         return {
             ...transform,
-            x: transform.x + offsetX - handleRect.width / 2,
-            y: transform.y + offsetY - handleRect.height / 2,
+            x: transform.x + offsetX,
+            y: transform.y + offsetY
         };
     }
 
