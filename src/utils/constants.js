@@ -15,6 +15,14 @@ export const dragItemsArray = [
     "Item 12"
 ];
 
+export const dummyContainerStyle = {
+    visibility: "hidden",
+    zIndex: -1,
+    position: "absolute",
+    top: 0,
+    left: 0
+}
+
 export const dragHandleStyle = {
     cursor: "grab",
     padding: "5px",

@@ -6,7 +6,8 @@ import {
     dragItemsArray,
     dragHandleStyle,
     defaultItemStyle,
-    dummyItemStyle
+    dummyItemStyle,
+    dummyContainerStyle
 } from "./utils/constants";
 
 function calcItemStyle({ activeId, transform }) {
@@ -116,16 +117,7 @@ export default function DragNDrop() {
                         {children}
                     </DndContext>
                 </div>
-                <div
-                    id="dummy-container"
-                    style={{
-                        visibility: "hidden",
-                        zIndex: -1,
-                        position: "absolute",
-                        top: 0,
-                        left: 0
-                    }}
-                >
+                <div id="dummy-container" style={dummyContainerStyle}>
                     {dummyChildren}
                 </div>
             </div>
