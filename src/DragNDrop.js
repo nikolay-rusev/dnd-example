@@ -37,7 +37,7 @@ function calcItemStyle({ activeId, transform }) {
         justifyContent: "space-between", // Adjusted for drag handle placement
         padding: "5px",
         transform: `translate(${transform?.x ?? 0}px, ${transform?.y ?? 0}px)`,
-        transition: "all 0.2s ease"
+        transition: "height 0.2s ease"
     };
 }
 
@@ -108,6 +108,22 @@ export default function DragNDrop() {
         }
     };
 
+    const getDraggableItems = ({ activeId, items }) => {
+        return (
+            <>
+                <SortableContext items={items}>
+                    {items.map((id) => (
+                        <SortableItem key={id} id={id} activeId={activeId} />
+                    ))}
+                </SortableContext>
+
+                <DragOverlay>
+                    {activeId ? <SortableItem id={activeId} activeId={activeId} /> : null}
+                </DragOverlay>
+            </>
+        );
+    };
+
     return (
         <div className="dnd-container" ref={containerRef} style={{ position: "relative" }}>
             <div
@@ -115,20 +131,8 @@ export default function DragNDrop() {
                 style={{ height: topFillHeight, transition: "height 0.2s ease" }}
             ></div>
             <div className="dnd-context-container" id="dnd-context-container">
-                <DndContext
-                    collisionDetection={pointerWithin}
-                    onDragStart={handleDragStart}
-                    onDragEnd={handleDragEnd}
-                >
-                    <SortableContext items={items}>
-                        {items.map((id) => (
-                            <SortableItem key={id} id={id} activeId={activeId} />
-                        ))}
-                    </SortableContext>
-
-                    <DragOverlay>
-                        {activeId ? <SortableItem id={activeId} activeId={activeId} /> : null}
-                    </DragOverlay>
+                <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+                    {getDraggableItems({ activeId, items })}
                 </DndContext>
             </div>
             <div
