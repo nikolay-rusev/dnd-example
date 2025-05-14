@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import {DndContext, DragOverlay, pointerWithin} from "@dnd-kit/core";
+import { DndContext, DragOverlay, pointerWithin } from "@dnd-kit/core";
 import {
     restrictToParentElement,
     restrictToVerticalAxis,
@@ -125,8 +125,10 @@ export default function DragNDrop() {
 
             // height between top corner of dragged element and mouse point y
             const adjust = mouseY - topOfDraggedElement;
+            // ratio to adjust for shrink element
+            const ratio = adjust / actualElementHeight;
             const topCompensation =
-                topOfDraggedElement - topOfShrinkEl + adjust - shrinkElementHeight / 2;
+                topOfDraggedElement - topOfShrinkEl + adjust - shrinkElementHeight * ratio;
 
             // easy
             const bottomCompensation = leftoverHeight - topCompensation;
@@ -155,7 +157,7 @@ export default function DragNDrop() {
         if (over) {
             setItems((prev) => arrayMove(prev, prev.indexOf(active.id), prev.indexOf(over.id)));
 
-            // scrollAfterDragEnd(event);
+            scrollAfterDragEnd(event);
         }
     };
 
@@ -199,8 +201,16 @@ export default function DragNDrop() {
         <div className="dnd-container" ref={containerRef} style={{ position: "relative" }}>
             <div className="top-fill" style={{ height: topFillHeight }}></div>
             <div id="dnd-context-container" className="dnd-context-container">
-                <div className="actual-container" style={{ position: "relative" }}>
-                    <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd} collisionDetection={pointerWithin}>
+                <div
+                    id="actual-container"
+                    className="actual-container"
+                    style={{ position: "relative" }}
+                >
+                    <DndContext
+                        onDragStart={handleDragStart}
+                        onDragEnd={handleDragEnd}
+                        collisionDetection={pointerWithin}
+                    >
                         {children}
                     </DndContext>
                 </div>
