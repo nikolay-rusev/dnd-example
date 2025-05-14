@@ -8,14 +8,18 @@ import {
     defaultItemStyle,
     dummyItemStyle,
     dummyContainerStyle,
-    TIMEOUT_SCROLL
+    TIMEOUT_SCROLL,
+    REGULAR_WIDTH,
+    SHRUNK_WIDTH,
+    SHRUNK_HEIGHT,
+    REGULAR_HEIGHT
 } from "./utils/constants";
 
 function calcItemStyle({ activeId, transform, last }) {
     return {
         ...defaultItemStyle,
-        width: activeId ? 30 : 150,
-        height: activeId ? 12 : 60,
+        width: activeId ? SHRUNK_WIDTH : REGULAR_WIDTH,
+        height: activeId ? SHRUNK_HEIGHT : REGULAR_HEIGHT,
         opacity: activeId ? 0.5 : 1,
         transform: `translate(${transform?.x ?? 0}px, ${transform?.y ?? 0}px)`,
         marginBottom: last ? 0 : 8
@@ -32,7 +36,7 @@ function SortableItem({ id, activeId, dummy, last }) {
     return (
         <div ref={setNodeRef} {...attributes} style={itemStyle} data-id={dragItemId}>
             <div {...listeners} className={"drag-handle"} style={dragHandleStyle}>
-               ...
+                ...
             </div>
             {id}
         </div>
