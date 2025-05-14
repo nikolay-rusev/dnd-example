@@ -3,7 +3,8 @@ import {
     REGULAR_HEIGHT,
     REGULAR_WIDTH,
     SHRUNK_HEIGHT,
-    SHRUNK_WIDTH, TIMEOUT_SCROLL
+    SHRUNK_WIDTH,
+    TIMEOUT_SCROLL
 } from "./constants";
 
 export const getActualElementHeight = (el) => {
@@ -13,13 +14,12 @@ export const getActualElementHeight = (el) => {
     return el.getBoundingClientRect().height + marginTop + marginBottom;
 };
 
-export const calcItemStyle = ({ activeId, transform, last }) => {
+export const calcItemStyle = ({ shrink, last }) => {
     return {
         ...defaultItemStyle,
-        width: activeId ? SHRUNK_WIDTH : REGULAR_WIDTH,
-        height: activeId ? SHRUNK_HEIGHT : REGULAR_HEIGHT,
-        opacity: activeId ? 0.5 : 1,
-        transform: `translate(${transform?.x ?? 0}px, ${transform?.y ?? 0}px)`,
+        width: shrink ? SHRUNK_WIDTH : REGULAR_WIDTH,
+        height: shrink ? SHRUNK_HEIGHT : REGULAR_HEIGHT,
+        opacity: shrink ? 0.5 : 1,
         marginBottom: last ? 0 : 8
     };
 };
