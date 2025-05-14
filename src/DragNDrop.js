@@ -11,10 +11,9 @@ import {
     dragItemsArray,
     dummyItemStyle,
     shrinkContainerStyle,
-    TIMEOUT,
-    TIMEOUT_SCROLL
+    TIMEOUT
 } from "./utils/constants";
-import {calcItemStyle, getActualElementHeight, scrollAfterDragEnd} from "./utils/helpers";
+import { calcItemStyle, getActualElementHeight, scrollAfterDragEnd } from "./utils/helpers";
 
 //
 const allowBottomCompensation = true;
