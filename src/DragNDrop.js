@@ -1,6 +1,5 @@
 import React, { useState, useRef } from "react";
 import { DndContext, DragOverlay } from "@dnd-kit/core";
-import { snapCenterToCursor } from "@dnd-kit/modifiers";
 import { arrayMove, SortableContext, useSortable } from "@dnd-kit/sortable";
 import {
     TIMEOUT,
@@ -110,7 +109,7 @@ export default function DragNDrop() {
             // how many elements fit the height of cursor
             const elCount = Math.trunc(mouseY / singleElementHeight);
 
-            // todo: make it work
+            // needs polish
             const topCompensation =
                 (elCount - currentPosition) * singleElementHeight + singleElementHeight / 2;
 
@@ -159,7 +158,7 @@ export default function DragNDrop() {
                         />
                     ))}
                 </SortableContext>
-                <DragOverlay modifiers={[]}>
+                <DragOverlay>
                     {activeId ? <SortableItem id={activeId} activeId={activeId} /> : null}
                 </DragOverlay>
             </>
