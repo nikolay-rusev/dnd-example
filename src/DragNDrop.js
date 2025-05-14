@@ -16,7 +16,7 @@ import {
 } from "./utils/constants";
 
 //
-const bottomCompensation = true;
+const allowBottomCompensation = true;
 
 function calcItemStyle({ activeId, transform, last }) {
     return {
@@ -76,21 +76,34 @@ export default function DragNDrop() {
 
         // Get the context container height after shrinking (assuming transitions complete)
         setTimeout(() => {
-            const contextHeight =
-                document.getElementById("dummy-container")?.getBoundingClientRect().height || 0;
+            // Adjust mouse Y based on scrolling
+            const scrollOffset = window.scrollY;
+            // const mouseY = event.active?.rect.current.translated.top + scrollOffset || 0;
+            // without scroll compensation
+            const mouseY = event.activatorEvent.clientY || 0;
+
+            const dummyContainer = document.getElementById("dummy-container");
+            const contextHeight = dummyContainer?.getBoundingClientRect().height || 0;
+
+            const firstElement = dummyContainer.firstElementChild;
+
+            const style = window.getComputedStyle(firstElement);
+            const marginTop = parseFloat(style.marginTop);
+            const marginBottom = parseFloat(style.marginBottom);
+
+            const singleElementHeight =
+                firstElement.getBoundingClientRect().height + marginTop + marginBottom;
+
+            const countElements = Math.trunc(mouseY / singleElementHeight);
+            const topCompensation = countElements * singleElementHeight;
 
             // Calculate remaining space
             const leftoverHeight = initialHeight - contextHeight;
 
-            // Adjust mouse Y based on scrolling
-            const scrollOffset = window.scrollY;
+            const bottomCompensation = leftoverHeight - topCompensation;
 
-            const mouseY = event.active?.rect.current.translated.top + scrollOffset || 0;
-
-            const proportion = mouseY / initialHeight;
-
-            setTopFillHeight(leftoverHeight * proportion);
-            setBottomFillHeight(leftoverHeight * (1 - proportion));
+            setTopFillHeight(topCompensation);
+            setBottomFillHeight(bottomCompensation);
         }, TIMEOUT); // Ensuring transition has completed
     };
 
@@ -158,7 +171,7 @@ export default function DragNDrop() {
                     {dummyChildren}
                 </div>
             </div>
-            {bottomCompensation && (
+            {allowBottomCompensation && (
                 <div className="bottom-fill" style={{ height: bottomFillHeight }}></div>
             )}
         </div>

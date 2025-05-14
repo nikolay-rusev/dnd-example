@@ -17,10 +17,10 @@ export const dummyContainerStyle = {
 
 export const dragHandleStyle = {
     cursor: "grab",
-    padding: "2px",
+    padding: "1px",
     background: "darkblue",
     color: "white",
-    borderRadius: "2px"
+    borderRadius: "1px"
 };
 
 export const defaultItemStyle = {
