@@ -123,6 +123,7 @@ export default function DragNDrop() {
             );
             const topOfShrinkEl = currentShrinkElement.getBoundingClientRect().top;
 
+            // height between top corner of dragged element and mouse point y
             const adjust = mouseY - topOfDraggedElement;
             const topCompensation =
                 topOfDraggedElement - topOfShrinkEl + adjust - shrinkElementHeight / 2;
