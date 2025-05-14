@@ -14,7 +14,7 @@ import {
     TIMEOUT,
     TIMEOUT_SCROLL
 } from "./utils/constants";
-import { calcItemStyle, getActualElementHeight } from "./utils/helpers";
+import {calcItemStyle, getActualElementHeight, scrollAfterDragEnd} from "./utils/helpers";
 
 //
 const allowBottomCompensation = true;
@@ -50,16 +50,6 @@ export default function DragNDrop() {
     const [topFillHeight, setTopFillHeight] = useState(0);
     const [bottomFillHeight, setBottomFillHeight] = useState(0);
 
-    const scrollAfterDragEnd = (event) => {
-        // Scroll to the final position
-        setTimeout(() => {
-            document.querySelector(`[data-id=drag-item-${event.active.id}]`)?.scrollIntoView({
-                behavior: "smooth",
-                block: "center"
-            });
-        }, TIMEOUT_SCROLL); // Slight delay to allow transition
-    };
-
     const resetFillHeights = () => {
         setTimeout(() => {
             setTopFillHeight(0);
@@ -87,12 +77,15 @@ export default function DragNDrop() {
 
         // Get the context container height after shrinking (assuming transitions complete)
         setTimeout(() => {
+            // Adjust mouse Y based on scrolling
+            const scrollOffset = window.scrollY;
+
             const activatorEvent = event.activatorEvent;
-            const mouseY = activatorEvent.clientY || 0;
+            const mouseY = activatorEvent.clientY + scrollOffset || 0;
             // get element for drag-handle case
             const dragHandle = activatorEvent?.srcElement;
             const draggedElement = dragHandle?.parentElement;
-            const topOfDraggedElement = draggedElement.getBoundingClientRect().top;
+            const topOfDraggedElement = draggedElement.getBoundingClientRect().top + scrollOffset;
             const currentIndex = parseInt(draggedElement?.getAttribute("data-index"));
 
             const currentShrinkElement = document.querySelector(
