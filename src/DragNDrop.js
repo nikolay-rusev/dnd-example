@@ -1,6 +1,10 @@
 import React, { useState, useRef } from "react";
 import { DndContext, DragOverlay } from "@dnd-kit/core";
-import { snapCenterToCursor } from "@dnd-kit/modifiers";
+import {
+    snapCenterToCursor,
+    restrictToVerticalAxis,
+    restrictToParentElement
+} from "@dnd-kit/modifiers";
 import { arrayMove, SortableContext, useSortable } from "@dnd-kit/sortable";
 import {
     TIMEOUT,
@@ -15,7 +19,6 @@ import {
     SHRUNK_HEIGHT,
     REGULAR_HEIGHT
 } from "./utils/constants";
-import { snapHandleToCursor } from "./utils/snapHandleToCursor";
 
 //
 const allowBottomCompensation = true;
@@ -113,8 +116,7 @@ export default function DragNDrop() {
             const elCount = Math.trunc(mouseY / singleElementHeight);
 
             // needs polish
-            const topCompensation =
-                (elCount - currentPosition) * singleElementHeight + singleElementHeight / 2;
+            const topCompensation = (elCount - currentPosition + 0.5) * singleElementHeight;
 
             // easy
             const bottomCompensation = leftoverHeight - topCompensation;
@@ -143,7 +145,7 @@ export default function DragNDrop() {
         if (over) {
             setItems((prev) => arrayMove(prev, prev.indexOf(active.id), prev.indexOf(over.id)));
 
-            scrollAfterDragEnd(event);
+            // scrollAfterDragEnd(event);
         }
     };
 
@@ -161,7 +163,13 @@ export default function DragNDrop() {
                         />
                     ))}
                 </SortableContext>
-                <DragOverlay modifiers={[snapHandleToCursor]}>
+                <DragOverlay
+                    modifiers={[
+                        snapCenterToCursor,
+                        restrictToVerticalAxis,
+                        restrictToParentElement
+                    ]}
+                >
                     {activeId ? (
                         <SortableItem
                             id={activeId}
@@ -182,11 +190,7 @@ export default function DragNDrop() {
             <div className="top-fill" style={{ height: topFillHeight }}></div>
             <div id="dnd-context-container" className="dnd-context-container">
                 <div className="actual-container" style={{ position: "relative" }}>
-                    <DndContext
-                        onDragStart={handleDragStart}
-                        onDragEnd={handleDragEnd}
-                        autoScroll={{ layoutShiftCompensation: false }}
-                    >
+                    <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
                         {children}
                     </DndContext>
                 </div>
