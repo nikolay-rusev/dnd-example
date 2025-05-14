@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import { DndContext, DragOverlay } from "@dnd-kit/core";
+import { snapCenterToCursor } from "@dnd-kit/modifiers";
 import { arrayMove, SortableContext, useSortable } from "@dnd-kit/sortable";
 import {
     TIMEOUT,
@@ -14,6 +15,7 @@ import {
     SHRUNK_HEIGHT,
     REGULAR_HEIGHT
 } from "./utils/constants";
+import { snapHandleToCursor } from "./utils/snapHandleToCursor";
 
 //
 const allowBottomCompensation = true;
@@ -29,7 +31,7 @@ function calcItemStyle({ activeId, transform, last }) {
     };
 }
 
-function SortableItem({ id, activeId, dummy, last }) {
+function SortableItem({ id, activeId, dummy, last, className }) {
     const { attributes, setNodeRef, transform, listeners } = useSortable({ id });
 
     const itemStyle = dummy ? dummyItemStyle : calcItemStyle({ activeId, transform, last });
@@ -43,6 +45,7 @@ function SortableItem({ id, activeId, dummy, last }) {
             style={itemStyle}
             data-id={dragItemId}
             data-index={id}
+            className={className}
         >
             <div {...listeners} className={"drag-handle"} style={dragHandleStyle}>
                 ...
@@ -158,8 +161,14 @@ export default function DragNDrop() {
                         />
                     ))}
                 </SortableContext>
-                <DragOverlay>
-                    {activeId ? <SortableItem id={activeId} activeId={activeId} /> : null}
+                <DragOverlay modifiers={[snapHandleToCursor]}>
+                    {activeId ? (
+                        <SortableItem
+                            id={activeId}
+                            activeId={activeId}
+                            className={"drag-overlay"}
+                        />
+                    ) : null}
                 </DragOverlay>
             </>
         );
