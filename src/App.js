@@ -1,11 +1,11 @@
-import "./App.css";
+import './App.css';
 
-import DragNDrop2 from "./DragNDrop2";
+import DragNDrop from './DragNDrop';
 
 function App() {
     return (
-        <div className="App">
-            <DragNDrop2 />
+        <div className='App'>
+            <DragNDrop />
         </div>
     );
 }
