@@ -17,10 +17,12 @@ export default function DragNDrop2() {
 
     return (
         <DragDropProvider
-            onBeforeDragStart={() => {
+            onBeforeDragStart={(event) => {
+                console.log(event);
                 document.getElementById("sortable").style.scale = 0.5;
             }}
-            onDragEnd={() => {
+            onDragEnd={(event) => {
+                console.log(event);
                 document.getElementById("sortable").style.scale = 1;
             }}
         >
