@@ -14,12 +14,23 @@ export const getActualElementHeight = (el) => {
     return el.getBoundingClientRect().height + marginTop + marginBottom;
 };
 
-export const calcItemStyle = ({ shrink, last }) => {
+export const calcItemStyle = ({ activeId, transform, last }) => {
     return {
         ...defaultItemStyle,
-        width: shrink ? SHRUNK_WIDTH : REGULAR_WIDTH,
-        height: shrink ? SHRUNK_HEIGHT : REGULAR_HEIGHT,
-        opacity: shrink ? 0.5 : 1,
+        width: activeId ? SHRUNK_WIDTH : REGULAR_WIDTH,
+        height: activeId ? SHRUNK_HEIGHT : REGULAR_HEIGHT,
+        opacity: activeId ? 0.5 : 1,
+        transform: `translate(${transform?.x ?? 0}px, ${transform?.y ?? 0}px)`,
+        marginBottom: last ? 0 : 8
+    };
+};
+
+export const calcItemStyleForDND2 = ({ isDragging, last }) => {
+    return {
+        ...defaultItemStyle,
+        width: isDragging ? SHRUNK_WIDTH : REGULAR_WIDTH,
+        height: isDragging ? SHRUNK_HEIGHT : REGULAR_HEIGHT,
+        opacity: isDragging ? 0.5 : 1,
         marginBottom: last ? 0 : 8
     };
 };

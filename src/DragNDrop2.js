@@ -1,9 +1,7 @@
-import "./styles.css";
-import { useSortable } from "@dnd-kit/react/sortable";
 import { DragDropProvider } from "@dnd-kit/react";
+import { useSortable } from "@dnd-kit/react/sortable";
 import { move } from "@dnd-kit/helpers";
-import { arrayMove, SortableContext } from "@dnd-kit/sortable";
-
+import { SortableContext } from "@dnd-kit/sortable";
 import { DndContext, DragOverlay, MeasuringStrategy, pointerWithin } from "@dnd-kit/core";
 import {
     restrictToParentElement,
@@ -17,13 +15,13 @@ import {
     shrinkContainerStyle,
     TIMEOUT
 } from "./utils/constants";
-import { calcItemStyle, scrollAfterDragEnd } from "./utils/helpers";
+import { calcItemStyleForDND2, getActualElementHeight, scrollAfterDragEnd } from "./utils/helpers";
 import { useRef, useState } from "react";
 
-function SortableItem({ id, index, shrink, dummy, last, className }) {
+function SortableItem({ id, index, isDragging, dummy, last, className }) {
     const sortable = useSortable({ id, index });
 
-    const itemStyle = dummy ? dummyItemStyle : calcItemStyle({ shrink, last });
+    const itemStyle = dummy ? dummyItemStyle : calcItemStyleForDND2({ isDragging, last });
 
     const dragItemId = dummy ? null : `drag-item-${id}`;
 
@@ -42,19 +40,88 @@ function SortableItem({ id, index, shrink, dummy, last, className }) {
 
 export default function DragNDrop2() {
     const [items, setItems] = useState(dragItemsArray);
+    const [isDragging, setIsDragging] = useState(false);
     const containerRef = useRef(null);
     const [topFillHeight, setTopFillHeight] = useState(0);
     const [bottomFillHeight, setBottomFillHeight] = useState(0);
 
+    const resetFillHeights = () => {
+        setTimeout(() => {
+            setTopFillHeight(0);
+            setBottomFillHeight(0);
+        }, TIMEOUT);
+    };
+
+    const calculateFillHeights = ({ event }) => {
+        // Capture the original container height
+        const initialHeight = containerRef.current.getBoundingClientRect().height;
+
+        // shrunk container height
+        const shrinkContainer = document.getElementById("shrink-container");
+        const shrinkContainerHeight = shrinkContainer?.getBoundingClientRect().height;
+
+        // Calculate remaining space
+        const leftoverHeight = initialHeight - shrinkContainerHeight;
+
+        const shrinkElement = shrinkContainer?.firstElementChild;
+        const shrinkElementHeight = getActualElementHeight(shrinkElement);
+
+        const actualContainer = document.getElementById("actual-container");
+        const el = actualContainer?.firstElementChild;
+        const actualElementHeight = getActualElementHeight(el);
+
+        // Get the context container height after shrinking (assuming transitions complete)
+        setTimeout(() => {
+            // Adjust mouse Y based on scrolling
+            const scrollOffset = window.scrollY;
+
+            const activatorEvent = event.operation.activatorEvent;
+            const mouseY = activatorEvent.clientY;
+            // get element
+            const draggedElement = activatorEvent?.srcElement;
+            const topOfDraggedElement = draggedElement.getBoundingClientRect().top;
+            const currentIndex = parseInt(draggedElement?.getAttribute("data-index"));
+
+            const currentShrinkElement = document.querySelector(
+                `#shrink-container [data-index="${currentIndex}"]`
+            );
+            const topOfShrinkEl = Math.abs(
+                currentShrinkElement.getBoundingClientRect().top -
+                    currentShrinkElement?.parentElement.getBoundingClientRect().top
+            );
+
+            // height between top corner of dragged element and mouse point y
+            const adjust = mouseY - topOfDraggedElement;
+            // ratio to adjust for shrink element
+            const ratio = adjust / actualElementHeight;
+            const topCompensation =
+                topOfDraggedElement - topOfShrinkEl + adjust - shrinkElementHeight * ratio;
+
+            console.log("initialHeight: ", initialHeight);
+            console.log("shrinkContainerHeight: ", shrinkContainerHeight);
+            console.log("leftoverHeight: ", leftoverHeight);
+
+            // easy
+            const bottomCompensation = leftoverHeight - topCompensation;
+
+            setTopFillHeight(topCompensation);
+            setBottomFillHeight(bottomCompensation);
+
+            // scrollActiveElementIntoView(event?.active?.id);
+        }, TIMEOUT); // Ensuring transition has completed
+    };
+
     const handleBeforeDragStart = (event) => {
         if (!containerRef.current) return;
+        setIsDragging(true);
 
-        // calculateFillHeights({ event });
+        calculateFillHeights({ event });
     };
 
     const handleDragEnd = (event) => {
+        setIsDragging(false);
         // Smooth reset of fill heights
-        // resetFillHeights();
+        resetFillHeights();
 
         const draggedItem = event.operation.source;
 
@@ -69,6 +136,8 @@ export default function DragNDrop2() {
                         <SortableItem
                             key={id}
                             id={id}
+                            isDragging={isDragging}
+                            index={index}
                             dummy={dummy}
                             last={index === items.length - 1}
                         />
