@@ -7,32 +7,17 @@ import {
 } from "@dnd-kit/modifiers";
 import { arrayMove, SortableContext, useSortable } from "@dnd-kit/sortable";
 import {
-    defaultItemStyle,
     dragHandleStyle,
     dragItemsArray,
     dummyItemStyle,
-    REGULAR_HEIGHT,
-    REGULAR_WIDTH,
     shrinkContainerStyle,
-    SHRUNK_HEIGHT,
-    SHRUNK_WIDTH,
     TIMEOUT,
     TIMEOUT_SCROLL
 } from "./utils/constants";
+import { calcItemStyle, getActualElementHeight } from "./utils/helpers";
 
 //
 const allowBottomCompensation = true;
-
-function calcItemStyle({ activeId, transform, last }) {
-    return {
-        ...defaultItemStyle,
-        width: activeId ? SHRUNK_WIDTH : REGULAR_WIDTH,
-        height: activeId ? SHRUNK_HEIGHT : REGULAR_HEIGHT,
-        opacity: activeId ? 0.5 : 1,
-        transform: `translate(${transform?.x ?? 0}px, ${transform?.y ?? 0}px)`,
-        marginBottom: last ? 0 : 8
-    };
-}
 
 function SortableItem({ id, activeId, dummy, last, className }) {
     const { attributes, setNodeRef, transform, listeners } = useSortable({ id });
@@ -81,14 +66,6 @@ export default function DragNDrop() {
             setBottomFillHeight(0);
         }, TIMEOUT);
     };
-
-    function getActualElementHeight(el) {
-        if (!el) return 0;
-        const style = window.getComputedStyle(el);
-        const marginTop = parseFloat(style.marginTop);
-        const marginBottom = parseFloat(style.marginBottom);
-        return el.getBoundingClientRect().height + marginTop + marginBottom;
-    }
 
     const calculateFillHeights = ({ event }) => {
         // Capture the original container height
