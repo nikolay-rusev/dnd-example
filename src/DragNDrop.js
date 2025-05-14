@@ -82,14 +82,14 @@ export default function DragNDrop() {
         // Get the context container height after shrinking (assuming transitions complete)
         setTimeout(() => {
             // Adjust mouse Y based on scrolling
-            const scrollOffset = window.scrollY;
+            // const scrollOffset = window.scrollY;
 
             const activatorEvent = event.activatorEvent;
-            const mouseY = activatorEvent.clientY + scrollOffset || 0;
+            const mouseY = activatorEvent.clientY;
             // get element for drag-handle case
             const dragHandle = activatorEvent?.srcElement;
             const draggedElement = dragHandle?.parentElement;
-            const topOfDraggedElement = draggedElement.getBoundingClientRect().top + scrollOffset;
+            const topOfDraggedElement = draggedElement.getBoundingClientRect().top;
             const currentIndex = parseInt(draggedElement?.getAttribute("data-index"));
 
             const currentShrinkElement = document.querySelector(
