@@ -15,6 +15,9 @@ import {
     REGULAR_HEIGHT
 } from "./utils/constants";
 
+//
+const bottomCompensation = true;
+
 function calcItemStyle({ activeId, transform, last }) {
     return {
         ...defaultItemStyle,
@@ -155,7 +158,9 @@ export default function DragNDrop() {
                     {dummyChildren}
                 </div>
             </div>
-            <div className="bottom-fill" style={{ height: bottomFillHeight }}></div>
+            {bottomCompensation && (
+                <div className="bottom-fill" style={{ height: bottomFillHeight }}></div>
+            )}
         </div>
     );
 }
