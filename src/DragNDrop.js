@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { DndContext, DragOverlay, pointerWithin } from "@dnd-kit/core";
+import { DndContext, DragOverlay, MeasuringStrategy, pointerWithin } from "@dnd-kit/core";
 import {
     restrictToParentElement,
     restrictToVerticalAxis,
@@ -13,7 +13,12 @@ import {
     shrinkContainerStyle,
     TIMEOUT
 } from "./utils/constants";
-import { calcItemStyle, getActualElementHeight, scrollAfterDragEnd } from "./utils/helpers";
+import {
+    calcItemStyle,
+    getActualElementHeight,
+    scrollActiveElementIntoView,
+    scrollAfterDragEnd
+} from "./utils/helpers";
 
 //
 const allowBottomCompensation = true;
@@ -104,6 +109,8 @@ export default function DragNDrop() {
 
             setTopFillHeight(topCompensation);
             setBottomFillHeight(bottomCompensation);
+
+            scrollActiveElementIntoView(event?.active?.id);
         }, TIMEOUT); // Ensuring transition has completed
     };
 
@@ -179,6 +186,12 @@ export default function DragNDrop() {
                         onDragStart={handleDragStart}
                         onDragEnd={handleDragEnd}
                         collisionDetection={pointerWithin}
+                        autoScroll={{ layoutShiftCompensation: false }}
+                        measuring={{
+                            droppable: {
+                                strategy: MeasuringStrategy.WhileDragging // Correct way to define measuring strategy
+                            }
+                        }}
                     >
                         {children}
                     </DndContext>
