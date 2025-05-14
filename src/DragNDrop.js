@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import { DndContext, DragOverlay } from "@dnd-kit/core";
+// import { snapCenterToCursor } from "@dnd-kit/modifiers";
 import { arrayMove, SortableContext, useSortable } from "@dnd-kit/sortable";
 import {
     TIMEOUT,
@@ -7,7 +8,7 @@ import {
     dragHandleStyle,
     defaultItemStyle,
     dummyItemStyle,
-    dummyContainerStyle,
+    shrinkContainerStyle,
     TIMEOUT_SCROLL,
     REGULAR_WIDTH,
     SHRUNK_WIDTH,
@@ -37,7 +38,13 @@ function SortableItem({ id, activeId, dummy, last }) {
     const dragItemId = dummy ? null : `drag-item-${id}`;
 
     return (
-        <div ref={setNodeRef} {...attributes} style={itemStyle} data-id={dragItemId}>
+        <div
+            ref={setNodeRef}
+            {...attributes}
+            style={itemStyle}
+            data-id={dragItemId}
+            data-index={id}
+        >
             <div {...listeners} className={"drag-handle"} style={dragHandleStyle}>
                 ...
             </div>
@@ -74,32 +81,39 @@ export default function DragNDrop() {
         // Capture the original container height
         const initialHeight = containerRef.current.getBoundingClientRect().height;
 
+        // shrunk container height
+        const shrinkContainer = document.getElementById("shrink-container");
+        const shrinkContainerHeight = shrinkContainer?.getBoundingClientRect().height || 0;
+
+        // Calculate remaining space
+        const leftoverHeight = initialHeight - shrinkContainerHeight;
+
+        const el = shrinkContainer.firstElementChild;
+        const style = window.getComputedStyle(el);
+        const marginTop = parseFloat(style.marginTop);
+        const marginBottom = parseFloat(style.marginBottom);
+        // calculate single element height
+        const singleElementHeight = el.getBoundingClientRect().height + marginTop + marginBottom;
+
         // Get the context container height after shrinking (assuming transitions complete)
         setTimeout(() => {
             // Adjust mouse Y based on scrolling
-            const scrollOffset = window.scrollY;
-            // const mouseY = event.active?.rect.current.translated.top + scrollOffset || 0;
-            // without scroll compensation
-            const mouseY = event.activatorEvent.clientY || 0;
+            // const scrollOffset = window.scrollY;
 
-            const dummyContainer = document.getElementById("dummy-container");
-            const contextHeight = dummyContainer?.getBoundingClientRect().height || 0;
+            const activatorEvent = event.activatorEvent;
+            const mouseY = activatorEvent.clientY || 0;
+            // in case of drag handle use srcElement?.parentElement
+            const currentElement = activatorEvent?.srcElement?.parentElement;
+            const currentIndex = parseInt(currentElement?.getAttribute("data-index"));
+            const currentPosition = items.indexOf(currentIndex);
 
-            const firstElement = dummyContainer.firstElementChild;
+            // how many elements fit the height of cursor
+            const elCount = Math.trunc(mouseY / singleElementHeight);
 
-            const style = window.getComputedStyle(firstElement);
-            const marginTop = parseFloat(style.marginTop);
-            const marginBottom = parseFloat(style.marginBottom);
+            // todo: make it work
+            const topCompensation = (elCount - 1) * singleElementHeight + singleElementHeight / 2;
 
-            const singleElementHeight =
-                firstElement.getBoundingClientRect().height + marginTop + marginBottom;
-
-            const countElements = Math.trunc(mouseY / singleElementHeight);
-            const topCompensation = countElements * singleElementHeight;
-
-            // Calculate remaining space
-            const leftoverHeight = initialHeight - contextHeight;
-
+            // easy
             const bottomCompensation = leftoverHeight - topCompensation;
 
             setTopFillHeight(topCompensation);
@@ -167,7 +181,7 @@ export default function DragNDrop() {
                         {children}
                     </DndContext>
                 </div>
-                <div id="dummy-container" style={dummyContainerStyle}>
+                <div id="shrink-container" style={shrinkContainerStyle}>
                     {dummyChildren}
                 </div>
             </div>

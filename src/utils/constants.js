@@ -7,7 +7,7 @@ export const SHRUNK_HEIGHT = 12;
 
 export const dragItemsArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
-export const dummyContainerStyle = {
+export const shrinkContainerStyle = {
     visibility: "visible",
     zIndex: -1,
     position: "absolute",
