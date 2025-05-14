@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import { DndContext, DragOverlay } from "@dnd-kit/core";
-// import { snapCenterToCursor } from "@dnd-kit/modifiers";
+import { snapCenterToCursor } from "@dnd-kit/modifiers";
 import { arrayMove, SortableContext, useSortable } from "@dnd-kit/sortable";
 import {
     TIMEOUT,
@@ -111,7 +111,8 @@ export default function DragNDrop() {
             const elCount = Math.trunc(mouseY / singleElementHeight);
 
             // todo: make it work
-            const topCompensation = (elCount - 1) * singleElementHeight + singleElementHeight / 2;
+            const topCompensation =
+                (elCount - currentPosition) * singleElementHeight + singleElementHeight / 2;
 
             // easy
             const bottomCompensation = leftoverHeight - topCompensation;
