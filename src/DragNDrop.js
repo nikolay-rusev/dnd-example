@@ -1,23 +1,23 @@
-import React, { useState, useRef } from "react";
-import { DndContext, DragOverlay } from "@dnd-kit/core";
+import React, { useRef, useState } from "react";
+import {DndContext, DragOverlay, pointerWithin} from "@dnd-kit/core";
 import {
-    snapCenterToCursor,
+    restrictToParentElement,
     restrictToVerticalAxis,
-    restrictToParentElement
+    snapCenterToCursor
 } from "@dnd-kit/modifiers";
 import { arrayMove, SortableContext, useSortable } from "@dnd-kit/sortable";
 import {
-    TIMEOUT,
-    dragItemsArray,
-    dragHandleStyle,
     defaultItemStyle,
+    dragHandleStyle,
+    dragItemsArray,
     dummyItemStyle,
-    shrinkContainerStyle,
-    TIMEOUT_SCROLL,
+    REGULAR_HEIGHT,
     REGULAR_WIDTH,
-    SHRUNK_WIDTH,
+    shrinkContainerStyle,
     SHRUNK_HEIGHT,
-    REGULAR_HEIGHT
+    SHRUNK_WIDTH,
+    TIMEOUT,
+    TIMEOUT_SCROLL
 } from "./utils/constants";
 
 //
@@ -82,41 +82,50 @@ export default function DragNDrop() {
         }, TIMEOUT);
     };
 
+    function getActualElementHeight(el) {
+        if (!el) return 0;
+        const style = window.getComputedStyle(el);
+        const marginTop = parseFloat(style.marginTop);
+        const marginBottom = parseFloat(style.marginBottom);
+        return el.getBoundingClientRect().height + marginTop + marginBottom;
+    }
+
     const calculateFillHeights = ({ event }) => {
         // Capture the original container height
         const initialHeight = containerRef.current.getBoundingClientRect().height;
 
         // shrunk container height
         const shrinkContainer = document.getElementById("shrink-container");
-        const shrinkContainerHeight = shrinkContainer?.getBoundingClientRect().height || 0;
+        const shrinkContainerHeight = shrinkContainer?.getBoundingClientRect().height;
 
         // Calculate remaining space
         const leftoverHeight = initialHeight - shrinkContainerHeight;
 
-        const el = shrinkContainer.firstElementChild;
-        const style = window.getComputedStyle(el);
-        const marginTop = parseFloat(style.marginTop);
-        const marginBottom = parseFloat(style.marginBottom);
-        // calculate single element height
-        const singleElementHeight = el.getBoundingClientRect().height + marginTop + marginBottom;
+        const shrinkElement = shrinkContainer?.firstElementChild;
+        const shrinkElementHeight = getActualElementHeight(shrinkElement);
+
+        const actualContainer = document.getElementById("actual-container");
+        const el = actualContainer?.firstElementChild;
+        const actualElementHeight = getActualElementHeight(el);
 
         // Get the context container height after shrinking (assuming transitions complete)
         setTimeout(() => {
-            // Adjust mouse Y based on scrolling
-            // const scrollOffset = window.scrollY;
-
             const activatorEvent = event.activatorEvent;
             const mouseY = activatorEvent.clientY || 0;
-            // in case of drag handle use srcElement?.parentElement
-            const currentElement = activatorEvent?.srcElement?.parentElement;
-            const currentIndex = parseInt(currentElement?.getAttribute("data-index"));
-            const currentPosition = items.indexOf(currentIndex);
+            // get element for drag-handle case
+            const dragHandle = activatorEvent?.srcElement;
+            const draggedElement = dragHandle?.parentElement;
+            const topOfDraggedElement = draggedElement.getBoundingClientRect().top;
+            const currentIndex = parseInt(draggedElement?.getAttribute("data-index"));
 
-            // how many elements fit the height of cursor
-            const elCount = Math.trunc(mouseY / singleElementHeight);
+            const currentShrinkElement = document.querySelector(
+                `#shrink-container [data-index="${currentIndex}"]`
+            );
+            const topOfShrinkEl = currentShrinkElement.getBoundingClientRect().top;
 
-            // needs polish
-            const topCompensation = (elCount - currentPosition + 0.5) * singleElementHeight;
+            const adjust = mouseY - topOfDraggedElement;
+            const topCompensation =
+                topOfDraggedElement - topOfShrinkEl + adjust - shrinkElementHeight / 2;
 
             // easy
             const bottomCompensation = leftoverHeight - topCompensation;
@@ -190,7 +199,7 @@ export default function DragNDrop() {
             <div className="top-fill" style={{ height: topFillHeight }}></div>
             <div id="dnd-context-container" className="dnd-context-container">
                 <div className="actual-container" style={{ position: "relative" }}>
-                    <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+                    <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd} collisionDetection={pointerWithin}>
                         {children}
                     </DndContext>
                 </div>
