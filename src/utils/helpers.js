@@ -4,8 +4,8 @@ import {
     REGULAR_WIDTH,
     SHRUNK_HEIGHT,
     SHRUNK_WIDTH,
-    TIMEOUT_SCROLL
-} from "./constants";
+    TIMEOUT_SCROLL,
+} from './constants';
 
 export const getActualElementHeight = (el) => {
     const style = window.getComputedStyle(el);
@@ -14,40 +14,42 @@ export const getActualElementHeight = (el) => {
     return el.getBoundingClientRect().height + marginTop + marginBottom;
 };
 
-export const calcItemStyle = ({ activeId, transform, last }) => {
+export const calcItemStyle = ({activeId, transform, last}) => {
     return {
         ...defaultItemStyle,
-        width: activeId ? SHRUNK_WIDTH : REGULAR_WIDTH,
-        height: activeId ? SHRUNK_HEIGHT : REGULAR_HEIGHT,
+        // width: activeId ? SHRUNK_WIDTH : REGULAR_WIDTH,
+        //height: activeId ? SHRUNK_HEIGHT : REGULAR_HEIGHT,
         opacity: activeId ? 0.5 : 1,
         transform: `translate(${transform?.x ?? 0}px, ${transform?.y ?? 0}px)`,
-        marginBottom: last ? 0 : 8
+        marginBottom: last ? 0 : 8,
     };
 };
 
-export const calcItemStyleForDND2 = ({ isDragging, last }) => {
+export const calcItemStyleForDND2 = ({isDragging, last}) => {
     return {
         ...defaultItemStyle,
         width: isDragging ? SHRUNK_WIDTH : REGULAR_WIDTH,
         height: isDragging ? SHRUNK_HEIGHT : REGULAR_HEIGHT,
         opacity: isDragging ? 0.5 : 1,
-        marginBottom: last ? 0 : 8
+        marginBottom: last ? 0 : 8,
     };
 };
 
 export const scrollAfterDragEnd = (event) => {
     // Scroll to the final position
     setTimeout(() => {
-        document.querySelector(`[data-id=drag-item-${event.active.id}]`)?.scrollIntoView({
-            behavior: "smooth",
-            block: "center"
-        });
+        document
+            .querySelector(`[data-id=drag-item-${event.active.id}]`)
+            ?.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center',
+            });
     }, TIMEOUT_SCROLL); // Slight delay to allow transition
 };
 
 export const scrollActiveElementIntoView = (id) => {
     document.querySelector(`[data-id=drag-item-${id}]`)?.scrollIntoView({
-        behavior: "smooth",
-        block: "center"
+        behavior: 'smooth',
+        block: 'center',
     });
 };

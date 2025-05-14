@@ -1,32 +1,39 @@
-import React, { useRef, useState } from "react";
-import { DndContext, DragOverlay, MeasuringStrategy, pointerWithin } from "@dnd-kit/core";
+import React, {useRef, useState} from 'react';
+import {
+    DndContext,
+    DragOverlay,
+    MeasuringStrategy,
+    pointerWithin,
+} from '@dnd-kit/core';
 import {
     restrictToParentElement,
     restrictToVerticalAxis,
-    snapCenterToCursor
-} from "@dnd-kit/modifiers";
-import { arrayMove, SortableContext, useSortable } from "@dnd-kit/sortable";
+    snapCenterToCursor,
+} from '@dnd-kit/modifiers';
+import {arrayMove, SortableContext, useSortable} from '@dnd-kit/sortable';
 import {
     dragHandleStyle,
     dragItemsArray,
     dummyItemStyle,
     shrinkContainerStyle,
-    TIMEOUT
-} from "./utils/constants";
+    TIMEOUT,
+} from './utils/constants';
 import {
     calcItemStyle,
     getActualElementHeight,
     scrollActiveElementIntoView,
-    scrollAfterDragEnd
-} from "./utils/helpers";
+    scrollAfterDragEnd,
+} from './utils/helpers';
 
 //
 const allowBottomCompensation = true;
 
-function SortableItem({ id, activeId, dummy, last, className }) {
-    const { attributes, setNodeRef, transform, listeners } = useSortable({ id });
+function SortableItem({id, activeId, dummy, last, className}) {
+    const {attributes, setNodeRef, transform, listeners} = useSortable({id});
 
-    const itemStyle = dummy ? dummyItemStyle : calcItemStyle({ activeId, transform, last });
+    const itemStyle = dummy
+        ? dummyItemStyle
+        : calcItemStyle({activeId, transform, last});
 
     const dragItemId = dummy ? null : `drag-item-${id}`;
 
@@ -39,7 +46,11 @@ function SortableItem({ id, activeId, dummy, last, className }) {
             data-index={id}
             className={className}
         >
-            <div {...listeners} className={"drag-handle"} style={dragHandleStyle}>
+            <div
+                {...listeners}
+                className={'drag-handle'}
+                style={dragHandleStyle}
+            >
                 ...
             </div>
             {id}
@@ -61,13 +72,15 @@ export default function DragNDrop() {
         }, TIMEOUT);
     };
 
-    const calculateFillHeights = ({ event }) => {
+    const calculateFillHeights = ({event}) => {
         // Capture the original container height
-        const initialHeight = containerRef.current.getBoundingClientRect().height;
+        const initialHeight =
+            containerRef.current.getBoundingClientRect().height;
 
         // shrunk container height
-        const shrinkContainer = document.getElementById("shrink-container");
-        const shrinkContainerHeight = shrinkContainer?.getBoundingClientRect().height;
+        const shrinkContainer = document.getElementById('shrink-container');
+        const shrinkContainerHeight =
+            shrinkContainer?.getBoundingClientRect().height;
 
         // Calculate remaining space
         const leftoverHeight = initialHeight - shrinkContainerHeight;
@@ -75,7 +88,7 @@ export default function DragNDrop() {
         const shrinkElement = shrinkContainer?.firstElementChild;
         const shrinkElementHeight = getActualElementHeight(shrinkElement);
 
-        const actualContainer = document.getElementById("actual-container");
+        const actualContainer = document.getElementById('actual-container');
         const el = actualContainer?.firstElementChild;
         const actualElementHeight = getActualElementHeight(el);
 
@@ -89,15 +102,19 @@ export default function DragNDrop() {
             // get element for drag-handle case
             const dragHandle = activatorEvent?.srcElement;
             const draggedElement = dragHandle?.parentElement;
-            const topOfDraggedElement = draggedElement.getBoundingClientRect().top;
-            const currentIndex = parseInt(draggedElement?.getAttribute("data-index"));
+            const topOfDraggedElement =
+                draggedElement.getBoundingClientRect().top;
+            const currentIndex = parseInt(
+                draggedElement?.getAttribute('data-index'),
+            );
 
             const currentShrinkElement = document.querySelector(
-                `#shrink-container [data-index="${currentIndex}"]`
+                `#shrink-container [data-index="${currentIndex}"]`,
             );
             const topOfShrinkEl = Math.abs(
                 currentShrinkElement.getBoundingClientRect().top -
-                    currentShrinkElement?.parentElement.getBoundingClientRect().top
+                    currentShrinkElement?.parentElement.getBoundingClientRect()
+                        .top,
             );
 
             // height between top corner of dragged element and mouse point y
@@ -105,11 +122,14 @@ export default function DragNDrop() {
             // ratio to adjust for shrink element
             const ratio = adjust / actualElementHeight;
             const topCompensation =
-                topOfDraggedElement - topOfShrinkEl + adjust - shrinkElementHeight * ratio;
+                topOfDraggedElement -
+                topOfShrinkEl +
+                adjust -
+                shrinkElementHeight * ratio;
 
-            console.log("initialHeight: ", initialHeight);
-            console.log("shrinkContainerHeight: ", shrinkContainerHeight);
-            console.log("leftoverHeight: ", leftoverHeight);
+            console.log('initialHeight: ', initialHeight);
+            console.log('shrinkContainerHeight: ', shrinkContainerHeight);
+            console.log('leftoverHeight: ', leftoverHeight);
 
             // easy
             const bottomCompensation = leftoverHeight - topCompensation;
@@ -126,25 +146,27 @@ export default function DragNDrop() {
 
         setActiveId(event.active.id);
 
-        calculateFillHeights({ event });
+        // calculateFillHeights({ event });
     };
 
     const handleDragEnd = (event) => {
         setActiveId(null);
 
         // Smooth reset of fill heights
-        resetFillHeights();
+        // resetFillHeights();
 
-        const { active, over } = event;
+        const {active, over} = event;
 
         if (over) {
-            setItems((prev) => arrayMove(prev, prev.indexOf(active.id), prev.indexOf(over.id)));
+            setItems((prev) =>
+                arrayMove(prev, prev.indexOf(active.id), prev.indexOf(over.id)),
+            );
 
-            scrollAfterDragEnd(event);
+            //      scrollAfterDragEnd(event);
         }
     };
 
-    const getDraggableItems = ({ activeId, items, dummy = false }) => {
+    const getDraggableItems = ({activeId, items, dummy = false}) => {
         return (
             <>
                 <SortableContext items={items}>
@@ -162,14 +184,14 @@ export default function DragNDrop() {
                     modifiers={[
                         snapCenterToCursor,
                         restrictToVerticalAxis,
-                        restrictToParentElement
+                        restrictToParentElement,
                     ]}
                 >
                     {activeId ? (
                         <SortableItem
                             id={activeId}
                             activeId={activeId}
-                            className={"drag-overlay"}
+                            className={'drag-overlay'}
                         />
                     ) : null}
                 </DragOverlay>
@@ -177,38 +199,45 @@ export default function DragNDrop() {
         );
     };
 
-    const children = getDraggableItems({ activeId, items });
-    const dummyChildren = getDraggableItems({ activeId, items, dummy: true });
+    const children = getDraggableItems({activeId, items});
+    const dummyChildren = getDraggableItems({activeId, items, dummy: true});
 
     return (
-        <div className="dnd-container" ref={containerRef} style={{ position: "relative" }}>
-            <div className="top-fill" style={{ height: topFillHeight }}></div>
-            <div id="dnd-context-container" className="dnd-context-container">
+        <div
+            className='dnd-container'
+            ref={containerRef}
+            style={{position: 'relative'}}
+        >
+            <div className='top-fill' style={{height: topFillHeight}}></div>
+            <div id='dnd-context-container' className='dnd-context-container'>
                 <div
-                    id="actual-container"
-                    className="actual-container"
-                    style={{ position: "relative" }}
+                    id='actual-container'
+                    className='actual-container'
+                    style={{position: 'relative'}}
                 >
                     <DndContext
                         onDragStart={handleDragStart}
                         onDragEnd={handleDragEnd}
                         collisionDetection={pointerWithin}
-                        autoScroll={{ layoutShiftCompensation: false }}
+                        autoScroll={{layoutShiftCompensation: false}}
                         measuring={{
                             droppable: {
-                                strategy: MeasuringStrategy.WhileDragging // Correct way to define measuring strategy
-                            }
+                                strategy: MeasuringStrategy.WhileDragging, // Correct way to define measuring strategy
+                            },
                         }}
                     >
                         {children}
                     </DndContext>
                 </div>
-                <div id="shrink-container" style={shrinkContainerStyle}>
+                <div id='shrink-container' style={shrinkContainerStyle}>
                     {dummyChildren}
                 </div>
             </div>
             {allowBottomCompensation && (
-                <div className="bottom-fill" style={{ height: bottomFillHeight }}></div>
+                <div
+                    className='bottom-fill'
+                    style={{height: bottomFillHeight}}
+                ></div>
             )}
         </div>
     );
