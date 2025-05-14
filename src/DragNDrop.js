@@ -17,7 +17,7 @@ import {
 import { calcItemStyle, getActualElementHeight } from "./utils/helpers";
 
 //
-const allowBottomCompensation = true;
+const allowBottomCompensation = false;
 
 function SortableItem({ id, activeId, dummy, last, className }) {
     const { attributes, setNodeRef, transform, listeners } = useSortable({ id });
