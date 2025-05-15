@@ -29,8 +29,8 @@ export const scrollAfterDragEnd = (event) => {
     // Scroll to the final position
     setTimeout(() => {
         document.querySelector(`[data-id=drag-item-${event.active.id}]`)?.scrollIntoView({
-            behavior: "smooth",
-            block: "center"
+            behavior: "auto",
+            block: "nearest"
         });
     }, TIMEOUT_SCROLL); // Slight delay to allow transition
 };
