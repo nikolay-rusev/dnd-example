@@ -15,9 +15,6 @@ import {
 } from "./utils/constants";
 import { calcItemStyle, getActualElementHeight, scrollAfterDragEnd } from "./utils/helpers";
 
-//
-const allowBottomCompensation = true;
-
 function SortableItem({ id, activeId, dummy, last, className }) {
     const { attributes, setNodeRef, transform, listeners } = useSortable({ id });
 
@@ -200,9 +197,7 @@ export default function DragNDrop() {
                         {dummyChildren}
                     </div>
                 </div>
-                {allowBottomCompensation && (
-                    <div className="bottom-fill" style={{ height: bottomFillHeight }}></div>
-                )}
+                <div className="bottom-fill" style={{ height: bottomFillHeight }}></div>
             </div>
         </>
     );

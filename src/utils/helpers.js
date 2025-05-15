@@ -25,16 +25,6 @@ export const calcItemStyle = ({ activeId, transform, last }) => {
     };
 };
 
-export const calcItemStyleForDND2 = ({ isDragging, last }) => {
-    return {
-        ...defaultItemStyle,
-        width: isDragging ? SHRUNK_WIDTH : REGULAR_WIDTH,
-        height: isDragging ? SHRUNK_HEIGHT : REGULAR_HEIGHT,
-        opacity: isDragging ? 0.5 : 1,
-        marginBottom: last ? 0 : 8
-    };
-};
-
 export const scrollAfterDragEnd = (event) => {
     // Scroll to the final position
     setTimeout(() => {
