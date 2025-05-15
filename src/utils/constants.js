@@ -29,7 +29,7 @@ export const defaultItemStyle = {
     alignItems: "center",
     justifyContent: "space-between", // Adjusted for drag handle placement
     padding: "5px",
-    transition: "all 0.2s ease",
+    transition: "all 0.3s ease",
     width: REGULAR_WIDTH,
     height: REGULAR_HEIGHT,
     opacity: 1,
