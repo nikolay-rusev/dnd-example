@@ -183,10 +183,10 @@ export default function DragNDrop() {
                             onDragStart={handleDragStart}
                             onDragEnd={handleDragEnd}
                             collisionDetection={pointerWithin}
-                            autoScroll={{ layoutShiftCompensation: true }}
+                            autoScroll={{ layoutShiftCompensation: false }}
                             measuring={{
                                 droppable: {
-                                    strategy: MeasuringStrategy.Always // Correct way to define measuring strategy
+                                    strategy: MeasuringStrategy.Always
                                 }
                             }}
                         >
