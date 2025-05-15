@@ -47,13 +47,6 @@ export default function DragNDrop() {
     const [topFillHeight, setTopFillHeight] = useState(0);
     const [bottomFillHeight, setBottomFillHeight] = useState(0);
 
-    const resetFillHeights = () => {
-        setTimeout(() => {
-            setTopFillHeight(0);
-            setBottomFillHeight(0);
-        }, TIMEOUT);
-    };
-
     const handleDragStart = (event) => {
         if (!containerRef.current) return;
 
@@ -70,8 +63,11 @@ export default function DragNDrop() {
     const handleDragEnd = (event) => {
         setActiveId(null);
 
-        // Smooth reset of fill heights
-        resetFillHeights();
+        // reset of fill heights
+        setTimeout(() => {
+            setTopFillHeight(0);
+            setBottomFillHeight(0);
+        }, TIMEOUT);
 
         const { active, over } = event;
 
