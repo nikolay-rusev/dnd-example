@@ -17,7 +17,6 @@ export const calculateFillHeights = ({ event, containerRef }) => {
     // Calculate remaining space
     const leftoverHeight = initialHeight - shrinkContainerHeight;
 
-    
     const activatorEvent = event.activatorEvent;
 
     // get element for drag-handle case
@@ -27,13 +26,13 @@ export const calculateFillHeights = ({ event, containerRef }) => {
     const currentShrinkElement = document.querySelector(
         `#shrink-container [data-index="${currentIndex}"]`
     );
-    
+
     const shrinkElementHeight = getActualElementHeight(currentShrinkElement);
     const draggedElementHeight = getActualElementHeight(draggedElement);
 
     // remove outside elements height
     const mouseY = activatorEvent.clientY - heightOfElementsBefore;
-    
+
     const realHeight = Math.abs(
         draggedElement.getBoundingClientRect().top -
             draggedElement?.parentElement.getBoundingClientRect().top
@@ -44,7 +43,9 @@ export const calculateFillHeights = ({ event, containerRef }) => {
             currentShrinkElement?.parentElement.getBoundingClientRect().top
     );
 
+    // from top of dragged el to mouse point in dragged el
     const mouseYInRectangle = mouseY - realHeight;
+    // radio for calculating the mouse point in shrunk element
     const ratio = mouseYInRectangle / draggedElementHeight;
     const topCompensation = mouseY - shrinkHeight - ratio * shrinkElementHeight;
 
