@@ -105,7 +105,12 @@ export default function DragNDrop() {
             // ratio to adjust for shrink element
             const ratio = adjust / actualElementHeight;
             const topCompensation =
-                topOfDraggedElement - topOfShrinkEl + adjust - shrinkElementHeight * ratio;
+                scrollOffset +
+                topOfDraggedElement -
+                topOfShrinkEl +
+                adjust -
+                shrinkElementHeight * ratio;
+            window.scroll(0, scrollOffset);
 
             console.log("initialHeight: ", initialHeight);
             console.log("shrinkContainerHeight: ", shrinkContainerHeight);
@@ -124,9 +129,9 @@ export default function DragNDrop() {
     const handleDragStart = (event) => {
         if (!containerRef.current) return;
 
-        setActiveId(event.active.id);
-
         calculateFillHeights({ event });
+
+        setActiveId(event.active.id);
     };
 
     const handleDragEnd = (event) => {
