@@ -10,6 +10,7 @@ export const calculateFillHeights = ({ event, containerRef }) => {
 
     // calculate size of elements before drag container
     const heightOfElementsBefore = containerRef.current.getBoundingClientRect().top;
+    console.log("heightOfElementsBefore", heightOfElementsBefore);
 
     // Calculate remaining space
     const leftoverHeight = initialHeight - shrinkContainerHeight;
@@ -25,10 +26,13 @@ export const calculateFillHeights = ({ event, containerRef }) => {
     );
 
     const shrinkElementHeight = getActualElementHeight(currentShrinkElement);
+    console.log("shrinkElementHeight", shrinkElementHeight);
     const draggedElementHeight = getActualElementHeight(draggedElement);
+    console.log("draggedElementHeight", draggedElementHeight);
 
     // remove outside elements height
     const mouseY = activatorEvent.clientY - heightOfElementsBefore;
+    console.log("mouseY", mouseY);
 
     const draggedElementTop = draggedElement.getBoundingClientRect().top;
     const draggedElementParentTop = draggedElement?.parentElement.getBoundingClientRect().top;
@@ -36,6 +40,7 @@ export const calculateFillHeights = ({ event, containerRef }) => {
     if (draggedElementTop < 0) {
         realHeight = Math.abs(draggedElementParentTop - draggedElementTop);
     }
+    console.log("realHeight", realHeight);
 
     const shrinkElementTop = currentShrinkElement.getBoundingClientRect().top;
     const shrinkElementParentTop = currentShrinkElement?.parentElement.getBoundingClientRect().top;
@@ -43,12 +48,16 @@ export const calculateFillHeights = ({ event, containerRef }) => {
     if (shrinkElementTop < 0) {
         shrinkHeight = Math.abs(shrinkElementParentTop - shrinkElementTop);
     }
+    console.log("shrinkHeight", shrinkHeight);
 
     // from top of dragged el to mouse point in dragged el
     const mouseYInRectangle = mouseY - realHeight;
+    console.log("mouseYInRectangle", mouseYInRectangle);
     // radio for calculating the mouse point in shrunk element
     const ratio = mouseYInRectangle / draggedElementHeight;
+    console.log("ratio", ratio);
     const topCompensation = mouseY - shrinkHeight - ratio * shrinkElementHeight;
+    console.log("topCompensation", topCompensation);
 
     // easy
     const bottomCompensation = leftoverHeight - topCompensation;

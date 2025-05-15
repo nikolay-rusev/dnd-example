@@ -53,13 +53,15 @@ export default function DragNDrop() {
 
         // scroll offset on y
         const scrollOffset = window.scrollY;
-
+        console.log("scrollOffset", scrollOffset);
         const { top, bottom } = calculateFillHeights({ event, containerRef });
 
         setTimeout(() => {
             setTopFillHeight(top);
             setBottomFillHeight(bottom);
             // restore scroll position
+            console.log("before adjust scrollOffset", scrollOffset);
+            console.log("----------------------------------------------------------------------");
             window.scrollTo({ top: scrollOffset });
         }, TIMEOUT);
 
