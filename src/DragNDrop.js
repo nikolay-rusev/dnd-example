@@ -186,35 +186,39 @@ export default function DragNDrop() {
     const dummyChildren = getDraggableItems({ activeId, items, dummy: true });
 
     return (
-        <div className="dnd-container" ref={containerRef} style={{ position: "relative" }}>
-            <div className="top-fill" style={{ height: topFillHeight }}></div>
-            <div id="dnd-context-container" className="dnd-context-container">
-                <div
-                    id="actual-container"
-                    className="actual-container"
-                    style={{ position: "relative" }}
-                >
-                    <DndContext
-                        onDragStart={handleDragStart}
-                        onDragEnd={handleDragEnd}
-                        collisionDetection={pointerWithin}
-                        autoScroll={{ layoutShiftCompensation: false }}
-                        measuring={{
-                            droppable: {
-                                strategy: MeasuringStrategy.WhileDragging // Correct way to define measuring strategy
-                            }
-                        }}
+        <>
+            <div style={{ height: 450, backgroundColor: "red" }}></div>
+            <div className="dnd-container" ref={containerRef} style={{ position: "relative" }}>
+                <div className="top-fill" style={{ height: topFillHeight }}></div>
+                <div id="dnd-context-container" className="dnd-context-container">
+                    <div
+                        id="actual-container"
+                        className="actual-container"
+                        style={{ position: "relative" }}
                     >
-                        {children}
-                    </DndContext>
+                        <DndContext
+                            onDragStart={handleDragStart}
+                            onDragEnd={handleDragEnd}
+                            collisionDetection={pointerWithin}
+                            autoScroll={{ layoutShiftCompensation: false }}
+                            measuring={{
+                                droppable: {
+                                    strategy: MeasuringStrategy.WhileDragging // Correct way to define measuring strategy
+                                }
+                            }}
+                        >
+                            {children}
+                        </DndContext>
+                    </div>
+                    <div id="shrink-container" style={shrinkContainerStyle}>
+                        {dummyChildren}
+                    </div>
                 </div>
-                <div id="shrink-container" style={shrinkContainerStyle}>
-                    {dummyChildren}
-                </div>
+                {allowBottomCompensation && (
+                    <div className="bottom-fill" style={{ height: bottomFillHeight }}></div>
+                )}
             </div>
-            {allowBottomCompensation && (
-                <div className="bottom-fill" style={{ height: bottomFillHeight }}></div>
-            )}
-        </div>
+            <div style={{ height: 300, backgroundColor: "red" }}></div>
+        </>
     );
 }
