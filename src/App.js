@@ -1,13 +1,13 @@
-import './App.css';
-import InteractionPane from 'interactionpane';
-import React, {useState} from 'react';
-import DragNDrop from './DragNDrop';
+import "./App.css";
+import InteractionPane from "./InteractionPane";
+import React, {useState} from "react";
+import DragNDrop from "./DragNDrop";
 
 function App() {
     const [scale, setScale] = useState(1);
     const [offset, setOffset] = useState({x: 0, y: 0});
     return (
-        <div className='App'>
+        <div className="App">
             <InteractionPane
                 scale={scale}
                 setScale={setScale}
