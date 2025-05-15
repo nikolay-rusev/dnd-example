@@ -9,6 +9,7 @@ export const calculateFillHeights = ({ event, containerRef }) => {
     const shrinkContainerHeight = shrinkContainer?.getBoundingClientRect().height;
 
     // calculate size of elements before drag container
+    // todo: correction of this may be needed
     const heightOfElementsBefore = containerRef.current.getBoundingClientRect().top;
     console.log("heightOfElementsBefore", heightOfElementsBefore);
 
