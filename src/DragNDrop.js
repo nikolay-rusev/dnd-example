@@ -136,7 +136,7 @@ export default function DragNDrop() {
                             autoScroll={{ layoutShiftCompensation: false }}
                             measuring={{
                                 droppable: {
-                                    strategy: MeasuringStrategy.Always
+                                    strategy: MeasuringStrategy.WhileDragging
                                 }
                             }}
                         >
