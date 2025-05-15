@@ -19,7 +19,6 @@ export const calcItemStyle = ({ activeId, transform, last }) => {
         ...defaultItemStyle,
         width: activeId ? SHRUNK_WIDTH : REGULAR_WIDTH,
         height: activeId ? SHRUNK_HEIGHT : REGULAR_HEIGHT,
-        opacity: activeId ? 0.5 : 1,
         transform: `translate(${transform?.x ?? 0}px, ${transform?.y ?? 0}px)`,
         marginBottom: last ? 0 : 8
     };
@@ -34,5 +33,3 @@ export const scrollAfterDragEnd = (event) => {
         });
     }, TIMEOUT_SCROLL); // Slight delay to allow transition
 };
-
-
