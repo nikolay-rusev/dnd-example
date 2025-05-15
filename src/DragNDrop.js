@@ -120,20 +120,20 @@ export default function DragNDrop() {
 
     return (
         <>
-            <div style={{ height: 200, backgroundColor: "mediumaquamarine" }}></div>
-            <div className="dnd-container" ref={containerRef} style={{ position: "relative" }}>
-                <div className="top-fill" style={{ height: topFillHeight }}></div>
+            <div style={{height: 200, backgroundColor: "mediumaquamarine"}}></div>
+            <div className="dnd-container" ref={containerRef} style={{position: "relative"}}>
+                <div className="top-fill" style={{height: topFillHeight}}></div>
                 <div id="dnd-context-container" className="dnd-context-container">
                     <div
                         id="actual-container"
                         className="actual-container"
-                        style={{ position: "relative" }}
+                        style={{position: "relative"}}
                     >
                         <DndContext
                             onDragStart={handleDragStart}
                             onDragEnd={handleDragEnd}
                             collisionDetection={pointerWithin}
-                            autoScroll={{ layoutShiftCompensation: false }}
+                            autoScroll={{layoutShiftCompensation: false}}
                             measuring={{
                                 droppable: {
                                     strategy: MeasuringStrategy.WhileDragging
@@ -147,8 +147,9 @@ export default function DragNDrop() {
                         {dummyChildren}
                     </div>
                 </div>
-                <div className="bottom-fill" style={{ height: bottomFillHeight }}></div>
+                <div className="bottom-fill" style={{height: bottomFillHeight}}></div>
             </div>
+            <div style={{height: 200, backgroundColor: "mediumaquamarine"}}></div>
         </>
     );
 }
