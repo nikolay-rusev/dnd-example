@@ -64,15 +64,19 @@ export default function DragNDrop() {
         const shrinkContainer = document.getElementById("shrink-container");
         const shrinkContainerHeight = shrinkContainer?.getBoundingClientRect().height;
 
+        //todo: calculate size of elements before drag container
+
         // Calculate remaining space
         const leftoverHeight = initialHeight - shrinkContainerHeight;
 
+        // use first element: assume same height elements
         const shrinkElement = shrinkContainer?.firstElementChild;
         const shrinkElementHeight = getActualElementHeight(shrinkElement);
 
+        // use first element: assume same height elements
         const actualContainer = document.getElementById("actual-container");
-        const el = actualContainer?.firstElementChild;
-        const actualElementHeight = getActualElementHeight(el);
+        const actualElement = actualContainer?.firstElementChild;
+        const actualElementHeight = getActualElementHeight(actualElement);
 
         const activatorEvent = event.activatorEvent;
         const mouseY = activatorEvent.clientY;
@@ -167,35 +171,38 @@ export default function DragNDrop() {
     const dummyChildren = getDraggableItems({ activeId, items, dummy: true });
 
     return (
-        <div className="dnd-container" ref={containerRef} style={{ position: "relative" }}>
-            <div className="top-fill" style={{ height: topFillHeight }}></div>
-            <div id="dnd-context-container" className="dnd-context-container">
-                <div
-                    id="actual-container"
-                    className="actual-container"
-                    style={{ position: "relative" }}
-                >
-                    <DndContext
-                        onDragStart={handleDragStart}
-                        onDragEnd={handleDragEnd}
-                        collisionDetection={pointerWithin}
-                        autoScroll={{ layoutShiftCompensation: true }}
-                        measuring={{
-                            droppable: {
-                                strategy: MeasuringStrategy.Always // Correct way to define measuring strategy
-                            }
-                        }}
+        <>
+            <div style={{ height: 200, backgroundColor: "mediumaquamarine" }}></div>
+            <div className="dnd-container" ref={containerRef} style={{ position: "relative" }}>
+                <div className="top-fill" style={{ height: topFillHeight }}></div>
+                <div id="dnd-context-container" className="dnd-context-container">
+                    <div
+                        id="actual-container"
+                        className="actual-container"
+                        style={{ position: "relative" }}
                     >
-                        {children}
-                    </DndContext>
+                        <DndContext
+                            onDragStart={handleDragStart}
+                            onDragEnd={handleDragEnd}
+                            collisionDetection={pointerWithin}
+                            autoScroll={{ layoutShiftCompensation: true }}
+                            measuring={{
+                                droppable: {
+                                    strategy: MeasuringStrategy.Always // Correct way to define measuring strategy
+                                }
+                            }}
+                        >
+                            {children}
+                        </DndContext>
+                    </div>
+                    <div id="shrink-container" style={shrinkContainerStyle}>
+                        {dummyChildren}
+                    </div>
                 </div>
-                <div id="shrink-container" style={shrinkContainerStyle}>
-                    {dummyChildren}
-                </div>
+                {allowBottomCompensation && (
+                    <div className="bottom-fill" style={{ height: bottomFillHeight }}></div>
+                )}
             </div>
-            {allowBottomCompensation && (
-                <div className="bottom-fill" style={{ height: bottomFillHeight }}></div>
-            )}
-        </div>
+        </>
     );
 }
