@@ -60,7 +60,7 @@ export default function DragNDrop() {
             setTopFillHeight(top);
             setBottomFillHeight(bottom);
             // restore scroll position
-            window.scrollTo({ top: scrollOffset });
+            // window.scrollTo({ top: scrollOffset });
         }, TIMEOUT);
 
         setActiveId(event.active.id);
