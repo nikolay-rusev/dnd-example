@@ -64,7 +64,8 @@ export default function DragNDrop() {
         const shrinkContainer = document.getElementById("shrink-container");
         const shrinkContainerHeight = shrinkContainer?.getBoundingClientRect().height;
 
-        //todo: calculate size of elements before drag container
+        // calculate size of elements before drag container
+        const heightOfElementsBefore = containerRef.current.getBoundingClientRect().top;
 
         // Calculate remaining space
         const leftoverHeight = initialHeight - shrinkContainerHeight;
@@ -79,7 +80,7 @@ export default function DragNDrop() {
         const actualElementHeight = getActualElementHeight(actualElement);
 
         const activatorEvent = event.activatorEvent;
-        const mouseY = activatorEvent.clientY;
+        const mouseY = activatorEvent.clientY - heightOfElementsBefore;
         // get element for drag-handle case
         const dragHandle = activatorEvent?.srcElement;
         const draggedElement = dragHandle?.parentElement;
