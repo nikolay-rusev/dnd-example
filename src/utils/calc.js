@@ -1,6 +1,9 @@
 import { getActualElementHeight } from "./helpers";
 
 export const calculateFillHeights = ({ event, containerRef }) => {
+    // scroll offset on y
+    const scrollOffset = window.scrollY;
+
     // Capture the original container height
     const initialHeight = containerRef.current.getBoundingClientRect().height;
 
