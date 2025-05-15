@@ -81,31 +81,41 @@ export default function DragNDrop() {
 
         // Get the context container height after shrinking (assuming transitions complete)
         setTimeout(() => {
+            const activatorEvent = event.activatorEvent;
+
             // Adjust mouse Y based on scrolling
             const scrollOffset = window.scrollY;
 
-            const activatorEvent = event.activatorEvent;
+            const dndContainer = document.getElementById("dnd-container");
+            // offset from elements before dnd container
+            const topOffsetWindow = dndContainer?.getBoundingClientRect().top;
+
+            // mouse position
             const mouseY = activatorEvent.clientY;
+            // remove the height of previous elements
+            const mouseYAdjusted = mouseY - topOffsetWindow;
             // get element for drag-handle case
             const dragHandle = activatorEvent?.srcElement;
             const draggedElement = dragHandle?.parentElement;
-            const topOfDraggedElement = draggedElement.getBoundingClientRect().top;
             const currentIndex = parseInt(draggedElement?.getAttribute("data-index"));
-
             const currentShrinkElement = document.querySelector(
                 `#shrink-container [data-index="${currentIndex}"]`
             );
+
+            // adjust with offset
+            const topOfDraggedElement = draggedElement.getBoundingClientRect().top - topOffsetWindow;
+            // calculated as difference
             const topOfShrinkEl = Math.abs(
                 currentShrinkElement.getBoundingClientRect().top -
                     currentShrinkElement?.parentElement.getBoundingClientRect().top
             );
 
             // height between top corner of dragged element and mouse point y
-            const adjust = mouseY - topOfDraggedElement;
+            const adjust = mouseYAdjusted - topOfDraggedElement;
             // ratio to adjust for shrink element
             const ratio = adjust / actualElementHeight;
             const topCompensation =
-                scrollOffset +
+                // scrollOffset +
                 topOfDraggedElement -
                 topOfShrinkEl +
                 adjust -
@@ -188,7 +198,12 @@ export default function DragNDrop() {
     return (
         <>
             <div style={{ height: 450, backgroundColor: "red" }}></div>
-            <div className="dnd-container" ref={containerRef} style={{ position: "relative" }}>
+            <div
+                id="dnd-container"
+                className="dnd-container"
+                ref={containerRef}
+                style={{ position: "relative" }}
+            >
                 <div className="top-fill" style={{ height: topFillHeight }}></div>
                 <div id="dnd-context-container" className="dnd-context-container">
                     <div
