@@ -101,8 +101,10 @@ export default function DragNDrop() {
         // easy
         const bottomCompensation = leftoverHeight - topCompensation;
 
-        setTopFillHeight(topCompensation);
-        setBottomFillHeight(bottomCompensation);
+        setTimeout(() => {
+            setTopFillHeight(topCompensation);
+            setBottomFillHeight(bottomCompensation);
+        }, TIMEOUT);
     };
 
     const handleDragStart = (event) => {
