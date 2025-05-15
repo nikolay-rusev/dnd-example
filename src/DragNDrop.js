@@ -13,12 +13,7 @@ import {
     shrinkContainerStyle,
     TIMEOUT
 } from "./utils/constants";
-import {
-    calcItemStyle,
-    getActualElementHeight,
-    scrollActiveElementIntoView,
-    scrollAfterDragEnd
-} from "./utils/helpers";
+import { calcItemStyle, getActualElementHeight, scrollAfterDragEnd } from "./utils/helpers";
 
 //
 const allowBottomCompensation = true;
@@ -79,51 +74,35 @@ export default function DragNDrop() {
         const el = actualContainer?.firstElementChild;
         const actualElementHeight = getActualElementHeight(el);
 
-        // Get the context container height after shrinking (assuming transitions complete)
-        setTimeout(() => {
-            // Adjust mouse Y based on scrolling
-            const scrollOffset = window.scrollY;
+        const activatorEvent = event.activatorEvent;
+        const mouseY = activatorEvent.clientY;
+        // get element for drag-handle case
+        const dragHandle = activatorEvent?.srcElement;
+        const draggedElement = dragHandle?.parentElement;
+        const currentIndex = parseInt(draggedElement?.getAttribute("data-index"));
+        const currentShrinkElement = document.querySelector(
+            `#shrink-container [data-index="${currentIndex}"]`
+        );
 
-            const activatorEvent = event.activatorEvent;
-            const mouseY = activatorEvent.clientY;
-            // get element for drag-handle case
-            const dragHandle = activatorEvent?.srcElement;
-            const draggedElement = dragHandle?.parentElement;
-            const topOfDraggedElement = draggedElement.getBoundingClientRect().top;
-            const currentIndex = parseInt(draggedElement?.getAttribute("data-index"));
+        const realHeight = Math.abs(
+            draggedElement.getBoundingClientRect().top -
+                draggedElement?.parentElement.getBoundingClientRect().top
+        );
 
-            const currentShrinkElement = document.querySelector(
-                `#shrink-container [data-index="${currentIndex}"]`
-            );
-            const topOfShrinkEl = Math.abs(
-                currentShrinkElement.getBoundingClientRect().top -
-                    currentShrinkElement?.parentElement.getBoundingClientRect().top
-            );
+        const shrinkHeight = Math.abs(
+            currentShrinkElement.getBoundingClientRect().top -
+                currentShrinkElement?.parentElement.getBoundingClientRect().top
+        );
 
-            // height between top corner of dragged element and mouse point y
-            const adjust = mouseY - topOfDraggedElement;
-            // ratio to adjust for shrink element
-            const ratio = adjust / actualElementHeight;
-            const topCompensation =
-                scrollOffset +
-                topOfDraggedElement -
-                topOfShrinkEl +
-                adjust -
-                shrinkElementHeight * ratio;
-            window.scroll(0, scrollOffset);
+        const mouseYInRectangle = mouseY - realHeight;
+        const ratio = mouseYInRectangle / actualElementHeight;
+        const topCompensation = mouseY - shrinkHeight - ratio * shrinkElementHeight;
 
-            console.log("initialHeight: ", initialHeight);
-            console.log("shrinkContainerHeight: ", shrinkContainerHeight);
-            console.log("leftoverHeight: ", leftoverHeight);
+        // easy
+        const bottomCompensation = leftoverHeight - topCompensation;
 
-            // easy
-            const bottomCompensation = leftoverHeight - topCompensation;
-
-            setTopFillHeight(topCompensation);
-            setBottomFillHeight(bottomCompensation);
-
-            // scrollActiveElementIntoView(event?.active?.id);
-        }, TIMEOUT); // Ensuring transition has completed
+        setTopFillHeight(topCompensation);
+        setBottomFillHeight(bottomCompensation);
     };
 
     const handleDragStart = (event) => {
@@ -198,10 +177,10 @@ export default function DragNDrop() {
                         onDragStart={handleDragStart}
                         onDragEnd={handleDragEnd}
                         collisionDetection={pointerWithin}
-                        autoScroll={{ layoutShiftCompensation: false }}
+                        autoScroll={{ layoutShiftCompensation: true }}
                         measuring={{
                             droppable: {
-                                strategy: MeasuringStrategy.WhileDragging // Correct way to define measuring strategy
+                                strategy: MeasuringStrategy.Always // Correct way to define measuring strategy
                             }
                         }}
                     >
