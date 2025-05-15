@@ -9,7 +9,7 @@ import { arrayMove, SortableContext, useSortable } from "@dnd-kit/sortable";
 import {
     dragHandleStyle,
     dragItemsArray,
-    dummyItemStyle,
+    dummyItemStyle, OUTER_CONTENT_HEIGHT,
     shrinkContainerStyle,
     TIMEOUT
 } from "./utils/constants";
@@ -116,7 +116,7 @@ export default function DragNDrop() {
 
     return (
         <>
-            <div style={{height: 200, backgroundColor: "mediumaquamarine"}}></div>
+            <div style={{height: OUTER_CONTENT_HEIGHT, backgroundColor: "mediumaquamarine"}}></div>
             <div className="dnd-container" ref={containerRef} style={{position: "relative"}}>
                 <div className="top-fill" style={{height: topFillHeight}}></div>
                 <div id="dnd-context-container" className="dnd-context-container">
@@ -145,7 +145,7 @@ export default function DragNDrop() {
                 </div>
                 <div className="bottom-fill" style={{height: bottomFillHeight}}></div>
             </div>
-            <div style={{height: 200, backgroundColor: "mediumaquamarine"}}></div>
+            <div style={{height: OUTER_CONTENT_HEIGHT, backgroundColor: "mediumaquamarine"}}></div>
         </>
     );
 }
