@@ -35,9 +35,4 @@ export const scrollAfterDragEnd = (event) => {
     }, TIMEOUT_SCROLL); // Slight delay to allow transition
 };
 
-export const scrollActiveElementIntoView = (id) => {
-    document.querySelector(`[data-id=drag-item-${id}]`)?.scrollIntoView({
-        behavior: "smooth",
-        block: "center"
-    });
-};
+
