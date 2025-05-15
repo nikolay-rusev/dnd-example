@@ -9,7 +9,8 @@ import { arrayMove, SortableContext, useSortable } from "@dnd-kit/sortable";
 import {
     dragHandleStyle,
     dragItemsArray,
-    dummyItemStyle, OUTER_CONTENT_HEIGHT,
+    dummyItemStyle,
+    OUTER_CONTENT_HEIGHT,
     shrinkContainerStyle,
     TIMEOUT
 } from "./utils/constants";
@@ -50,11 +51,16 @@ export default function DragNDrop() {
     const handleDragStart = (event) => {
         if (!containerRef.current) return;
 
+        // scroll offset on y
+        const scrollOffset = window.scrollY;
+
         const { top, bottom } = calculateFillHeights({ event, containerRef });
 
         setTimeout(() => {
             setTopFillHeight(top);
             setBottomFillHeight(bottom);
+            // restore scroll position
+            window.scrollTo({ top: scrollOffset });
         }, TIMEOUT);
 
         setActiveId(event.active.id);
@@ -116,20 +122,22 @@ export default function DragNDrop() {
 
     return (
         <>
-            <div style={{height: OUTER_CONTENT_HEIGHT, backgroundColor: "mediumaquamarine"}}></div>
-            <div className="dnd-container" ref={containerRef} style={{position: "relative"}}>
-                <div className="top-fill" style={{height: topFillHeight}}></div>
+            <div
+                style={{ height: OUTER_CONTENT_HEIGHT, backgroundColor: "mediumaquamarine" }}
+            ></div>
+            <div className="dnd-container" ref={containerRef} style={{ position: "relative" }}>
+                <div className="top-fill" style={{ height: topFillHeight }}></div>
                 <div id="dnd-context-container" className="dnd-context-container">
                     <div
                         id="actual-container"
                         className="actual-container"
-                        style={{position: "relative"}}
+                        style={{ position: "relative" }}
                     >
                         <DndContext
                             onDragStart={handleDragStart}
                             onDragEnd={handleDragEnd}
                             collisionDetection={pointerWithin}
-                            autoScroll={{layoutShiftCompensation: false}}
+                            autoScroll={{ layoutShiftCompensation: false }}
                             measuring={{
                                 droppable: {
                                     strategy: MeasuringStrategy.WhileDragging
@@ -143,9 +151,11 @@ export default function DragNDrop() {
                         {dummyChildren}
                     </div>
                 </div>
-                <div className="bottom-fill" style={{height: bottomFillHeight}}></div>
+                <div className="bottom-fill" style={{ height: bottomFillHeight }}></div>
             </div>
-            <div style={{height: OUTER_CONTENT_HEIGHT, backgroundColor: "mediumaquamarine"}}></div>
+            <div
+                style={{ height: OUTER_CONTENT_HEIGHT, backgroundColor: "mediumaquamarine" }}
+            ></div>
         </>
     );
 }
