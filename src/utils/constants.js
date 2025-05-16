@@ -1,10 +1,10 @@
 export const TIMEOUT = 0;
 export const TIMEOUT_SCROLL = 200;
 export const REGULAR_WIDTH = "300px";
-export const REGULAR_HEIGHT = "120px";
-export const SHRUNK_HEIGHT = "12px";
+export const REGULAR_HEIGHT = "200px";
+export const SHRUNK_HEIGHT = "40px";
 export const OUTER_CONTENT_HEIGHT = "450px";
-export const TRANSITION = "all 0.3s ease"
+export const TRANSITION = "all 0.3s ease";
 
 export const shrinkContainerStyle = {
     visibility: "hidden",
@@ -14,6 +14,7 @@ export const shrinkContainerStyle = {
 };
 
 export const dragHandleStyle = {
+    width: "100%",
     cursor: "grab",
     padding: "1px",
     background: "darkblue",
@@ -25,13 +26,13 @@ export const defaultItemStyle = {
     marginBottom: "8px",
     background: "lightblue",
     display: "flex",
+    flexDirection: "column",
     alignItems: "center",
     justifyContent: "space-between", // Adjusted for drag handle placement
     padding: "5px",
     transition: TRANSITION,
     width: REGULAR_WIDTH,
     height: REGULAR_HEIGHT,
-    opacity: 1,
     transform: `translate(0px, 0px)`
 };
 
