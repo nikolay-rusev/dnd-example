@@ -33,7 +33,7 @@ export function SortableItem({ id, activeId, dummy, last, className }) {
             className={className}
         >
             <div {...listeners} className={"drag-handle"} style={dragHandleStyle}>
-                ...
+                ☰
             </div>
             {id}
         </div>
