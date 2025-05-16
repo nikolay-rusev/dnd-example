@@ -56,9 +56,7 @@ export default function DragNDrop() {
         if (over) {
             setItems((prev) => arrayMove(prev, prev.indexOf(activeId), prev.indexOf(over.id)));
 
-            setTimeout(() => {
-                scrollAfterDragEnd(activeId);
-            }, 300);
+            scrollAfterDragEnd(activeId);
         }
     };
 
