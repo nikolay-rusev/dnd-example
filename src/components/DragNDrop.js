@@ -3,7 +3,6 @@ import { DndContext, DragOverlay, MeasuringStrategy, pointerWithin } from "@dnd-
 import { restrictToVerticalAxis, snapCenterToCursor } from "@dnd-kit/modifiers";
 import { arrayMove, SortableContext } from "@dnd-kit/sortable";
 import {
-    dragItemsArray,
     OUTER_CONTENT_HEIGHT,
     shrinkContainerStyle,
     TIMEOUT,
@@ -14,8 +13,10 @@ import { calculateFillHeights } from "../utils/calc";
 import { SortableItem } from "./SortableItem";
 import "./DragNDrop.css";
 
+export const itemsArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
 export default function DragNDrop() {
-    const [items, setItems] = useState(dragItemsArray);
+    const [items, setItems] = useState(itemsArray);
     const [activeId, setActiveId] = useState(null);
     const containerRef = useRef(null);
     const [topFillHeight, setTopFillHeight] = useState(0);
