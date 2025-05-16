@@ -1,10 +1,8 @@
-import './App.css';
-
-import DragNDrop from './components/DragNDrop';
+import DragNDrop from "./components/DragNDrop";
 
 function App() {
     return (
-        <div className='App'>
+        <div className="App">
             <DragNDrop />
         </div>
     );

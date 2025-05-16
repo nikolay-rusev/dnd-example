@@ -1,46 +1,18 @@
 import React, { useRef, useState } from "react";
 import { DndContext, DragOverlay, MeasuringStrategy, pointerWithin } from "@dnd-kit/core";
+import { restrictToVerticalAxis, snapCenterToCursor } from "@dnd-kit/modifiers";
+import { arrayMove, SortableContext } from "@dnd-kit/sortable";
 import {
-    restrictToParentElement,
-    restrictToVerticalAxis,
-    snapCenterToCursor
-} from "@dnd-kit/modifiers";
-import { arrayMove, SortableContext, useSortable } from "@dnd-kit/sortable";
-import {
-    dragHandleStyle,
     dragItemsArray,
-    dummyItemStyle,
     OUTER_CONTENT_HEIGHT,
     shrinkContainerStyle,
     TIMEOUT,
     TRANSITION
 } from "../utils/constants";
-import { calcItemStyle, scrollAfterDragEnd } from "../utils/helpers";
+import { scrollAfterDragEnd } from "../utils/helpers";
 import { calculateFillHeights } from "../utils/calc";
-
-function SortableItem({ id, activeId, dummy, last, className }) {
-    const { attributes, setNodeRef, transform, listeners } = useSortable({ id });
-
-    const itemStyle = dummy ? dummyItemStyle : calcItemStyle({ activeId, transform, last });
-
-    const dragItemId = dummy ? null : `drag-item-${id}`;
-
-    return (
-        <div
-            ref={setNodeRef}
-            {...attributes}
-            style={itemStyle}
-            data-id={dragItemId}
-            data-index={id}
-            className={className}
-        >
-            <div {...listeners} className={"drag-handle"} style={dragHandleStyle}>
-                ...
-            </div>
-            {id}
-        </div>
-    );
-}
+import { SortableItem } from "./SortableItem";
+import "./DragNDrop.css";
 
 export default function DragNDrop() {
     const [items, setItems] = useState(dragItemsArray);
