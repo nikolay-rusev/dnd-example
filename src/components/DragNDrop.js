@@ -13,6 +13,7 @@ import { calculateFillHeights } from "../utils/calc";
 import { SortableItem } from "./SortableItem";
 import "./DragNDrop.css";
 
+// handle on top or side - changes recalculation of compensation
 const topHandle = true;
 const itemsArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
