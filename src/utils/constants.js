@@ -24,7 +24,7 @@ export const dragHandleStyle = {
 };
 
 export const defaultItemStyle = {
-    marginBottom: 8,
+    marginBottom: "8px",
     background: "lightblue",
     display: "flex",
     alignItems: "center",
