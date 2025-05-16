@@ -5,6 +5,7 @@ export const REGULAR_HEIGHT = "120px";
 export const SHRUNK_WIDTH = "30px";
 export const SHRUNK_HEIGHT = "12px";
 export const OUTER_CONTENT_HEIGHT = "450px";
+export const TRANSITION = "all 0.3s ease"
 
 export const dragItemsArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
@@ -30,7 +31,7 @@ export const defaultItemStyle = {
     alignItems: "center",
     justifyContent: "space-between", // Adjusted for drag handle placement
     padding: "5px",
-    transition: "all 0.3s ease",
+    transition: TRANSITION,
     width: REGULAR_WIDTH,
     height: REGULAR_HEIGHT,
     opacity: 1,

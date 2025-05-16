@@ -12,7 +12,8 @@ import {
     dummyItemStyle,
     OUTER_CONTENT_HEIGHT,
     shrinkContainerStyle,
-    TIMEOUT
+    TIMEOUT,
+    TRANSITION
 } from "./utils/constants";
 import { calcItemStyle, scrollAfterDragEnd } from "./utils/helpers";
 import { calculateFillHeights } from "./utils/calc";
@@ -56,14 +57,12 @@ export default function DragNDrop() {
         console.log("scrollOffset", scrollOffset);
         const { top, bottom } = calculateFillHeights({ event, containerRef });
 
-        setTimeout(() => {
-            setTopFillHeight(top);
-            setBottomFillHeight(bottom);
-            // restore scroll position
-            console.log("before adjust scrollOffset", scrollOffset);
-            console.log("----------------------------------------------------------------------");
-            window.scrollTo({ top: scrollOffset });
-        }, TIMEOUT);
+        setTopFillHeight(top);
+        setBottomFillHeight(bottom);
+        // restore scroll position
+        console.log("before adjust scrollOffset", scrollOffset);
+        console.log("----------------------------------------------------------------------");
+        window.scrollTo({ top: scrollOffset });
 
         setActiveId(event.active.id);
     };
@@ -128,7 +127,10 @@ export default function DragNDrop() {
                 style={{ height: OUTER_CONTENT_HEIGHT, backgroundColor: "mediumaquamarine" }}
             ></div>
             <div className="dnd-container" ref={containerRef} style={{ position: "relative" }}>
-                <div className="top-fill" style={{ height: topFillHeight + "px" }}></div>
+                <div
+                    className="top-fill"
+                    style={{ transition: TRANSITION, height: topFillHeight + "px" }}
+                ></div>
                 <div id="dnd-context-container" className="dnd-context-container">
                     <div
                         id="actual-container"
@@ -153,7 +155,10 @@ export default function DragNDrop() {
                         {dummyChildren}
                     </div>
                 </div>
-                <div className="bottom-fill" style={{ height: bottomFillHeight + "px" }}></div>
+                <div
+                    className="bottom-fill"
+                    style={{ transition: TRANSITION, height: bottomFillHeight + "px" }}
+                ></div>
             </div>
             <div
                 style={{ height: OUTER_CONTENT_HEIGHT, backgroundColor: "mediumaquamarine" }}
