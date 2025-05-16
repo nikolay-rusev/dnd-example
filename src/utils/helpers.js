@@ -1,5 +1,6 @@
 import { TIMEOUT_SCROLL } from "./constants";
 
+// calc element height + margins
 export const getActualElementHeight = (el) => {
     const style = window.getComputedStyle(el);
     const marginTop = parseFloat(style.marginTop);

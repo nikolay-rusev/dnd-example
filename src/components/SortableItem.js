@@ -19,8 +19,10 @@ export const calcItemStyle = ({ activeId, transform, last }) => {
 export function SortableItem({ id, activeId, dummy, last, className }) {
     const { attributes, setNodeRef, transform, listeners } = useSortable({ id });
 
+    // last item has no bottom margin
     const itemStyle = dummy ? dummyItemStyle : calcItemStyle({ activeId, transform, last });
 
+    // put ids in actual elements for easier detection
     const dragItemId = dummy ? null : `drag-item-${id}`;
 
     return (

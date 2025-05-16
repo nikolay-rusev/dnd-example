@@ -15,12 +15,14 @@ import "./DragNDrop.css";
 
 // handle on top or side - changes recalculation of compensation
 const topHandle = true;
+const allowBottomCompensation = true;
 const itemsArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 export default function DragNDrop() {
     const [items, setItems] = useState(itemsArray);
     const [activeId, setActiveId] = useState(null);
     const containerRef = useRef(null);
+    // top & bottom compensations
     const [topFillHeight, setTopFillHeight] = useState(0);
     const [bottomFillHeight, setBottomFillHeight] = useState(0);
 
@@ -57,7 +59,7 @@ export default function DragNDrop() {
 
         if (over) {
             setItems((prev) => arrayMove(prev, prev.indexOf(activeId), prev.indexOf(over.id)));
-
+            // scroll dragged element into view
             scrollAfterDragEnd(activeId);
         }
     };
@@ -126,11 +128,14 @@ export default function DragNDrop() {
                         {dummyChildren}
                     </div>
                 </div>
-                <div
-                    className="bottom-fill"
-                    style={{ transition: TRANSITION, height: bottomFillHeight + "px" }}
-                ></div>
+                {allowBottomCompensation && (
+                    <div
+                        className="bottom-fill"
+                        style={{ transition: TRANSITION, height: bottomFillHeight + "px" }}
+                    ></div>
+                )}
             </div>
+
             <div
                 style={{ height: OUTER_CONTENT_HEIGHT, backgroundColor: "mediumaquamarine" }}
             ></div>

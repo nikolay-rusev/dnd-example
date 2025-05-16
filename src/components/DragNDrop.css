@@ -2,6 +2,7 @@
     text-align: center;
 }
 
+/* drag container */
 .actual-container {
     background-color: aliceblue;
     opacity: 0.9;
@@ -12,6 +13,7 @@
     opacity: 0.9;
 }
 
+/* compensation elements */
 .top-fill,
 .bottom-fill {
     background-color: palevioletred;

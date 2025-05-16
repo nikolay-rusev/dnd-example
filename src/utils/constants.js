@@ -22,6 +22,7 @@ export const dragHandleStyle = {
     borderRadius: "1px"
 };
 
+// default sortable item style
 export const defaultItemStyle = {
     marginBottom: "8px",
     background: "lightblue",
@@ -36,6 +37,7 @@ export const defaultItemStyle = {
     transform: `translate(0px, 0px)`
 };
 
+// default shrink item style
 export const dummyItemStyle = {
     ...defaultItemStyle,
     height: SHRUNK_HEIGHT
