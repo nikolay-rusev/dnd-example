@@ -61,7 +61,9 @@ export const calculateFillHeights = ({ event, containerRef, topHandle }) => {
     // radio for calculating the mouse point in shrunk element
     const ratio = mouseYInRectangle / draggedElementHeight;
     console.log("ratio", ratio);
-    const handleAdjustment = topHandle ? mouseYInRectangle : ratio * shrinkElementHeight;
+    const handleAdjustment = topHandle
+        ? mouseYInRectangle * (1 + ratio)
+        : ratio * shrinkElementHeight;
     const topCompensation = mouseY - shrinkHeight - handleAdjustment;
     console.log("topCompensation", topCompensation);
 
