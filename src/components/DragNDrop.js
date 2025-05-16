@@ -41,6 +41,10 @@ export default function DragNDrop() {
     };
 
     const handleDragEnd = (event) => {
+        const { active, over } = event;
+
+        const activeId = active.id;
+
         setActiveId(null);
 
         // reset of fill heights
@@ -49,12 +53,12 @@ export default function DragNDrop() {
             setBottomFillHeight(0);
         }, TIMEOUT);
 
-        const { active, over } = event;
-
         if (over) {
-            setItems((prev) => arrayMove(prev, prev.indexOf(active.id), prev.indexOf(over.id)));
+            setItems((prev) => arrayMove(prev, prev.indexOf(activeId), prev.indexOf(over.id)));
 
-            scrollAfterDragEnd(event);
+            setTimeout(() => {
+                scrollAfterDragEnd(activeId);
+            }, 300);
         }
     };
 

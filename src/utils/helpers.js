@@ -7,12 +7,12 @@ export const getActualElementHeight = (el) => {
     return el.getBoundingClientRect().height + marginTop + marginBottom;
 };
 
-export const scrollAfterDragEnd = (event) => {
+export const scrollAfterDragEnd = (id) => {
     // Scroll to the final position
     setTimeout(() => {
-        document.querySelector(`[data-id=drag-item-${event.active.id}]`)?.scrollIntoView({
-            behavior: "auto",
-            block: "nearest"
+        document.querySelector(`[data-id=drag-item-${id}]`)?.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
         });
     }, TIMEOUT_SCROLL); // Slight delay to allow transition
 };
