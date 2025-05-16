@@ -14,9 +14,9 @@ import {
     shrinkContainerStyle,
     TIMEOUT,
     TRANSITION
-} from "./utils/constants";
-import { calcItemStyle, scrollAfterDragEnd } from "./utils/helpers";
-import { calculateFillHeights } from "./utils/calc";
+} from "../utils/constants";
+import { calcItemStyle, scrollAfterDragEnd } from "../utils/helpers";
+import { calculateFillHeights } from "../utils/calc";
 
 function SortableItem({ id, activeId, dummy, last, className }) {
     const { attributes, setNodeRef, transform, listeners } = useSortable({ id });

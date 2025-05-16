@@ -1,6 +1,6 @@
 import './App.css';
 
-import DragNDrop from './DragNDrop';
+import DragNDrop from './components/DragNDrop';
 
 function App() {
     return (
