@@ -99,13 +99,7 @@ export default function DragNDrop() {
                         />
                     ))}
                 </SortableContext>
-                <DragOverlay
-                    modifiers={[
-                        snapCenterToCursor,
-                        restrictToVerticalAxis,
-                        restrictToParentElement
-                    ]}
-                >
+                <DragOverlay modifiers={[snapCenterToCursor, restrictToVerticalAxis]}>
                     {activeId ? (
                         <SortableItem
                             id={activeId}
