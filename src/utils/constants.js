@@ -1,7 +1,7 @@
 export const TIMEOUT = 0;
 export const TIMEOUT_SCROLL = 200;
 export const REGULAR_WIDTH = "300px";
-export const REGULAR_HEIGHT = "200px";
+export const REGULAR_HEIGHT = "400px";
 export const SHRUNK_HEIGHT = "40px";
 export const OUTER_CONTENT_HEIGHT = "450px";
 export const TRANSITION = "all 0.3s ease";
