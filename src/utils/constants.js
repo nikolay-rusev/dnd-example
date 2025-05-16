@@ -1,10 +1,10 @@
 export const TIMEOUT = 0;
 export const TIMEOUT_SCROLL = 200;
-export const REGULAR_WIDTH = 300;
-export const REGULAR_HEIGHT = 120;
-export const SHRUNK_WIDTH = 30;
-export const SHRUNK_HEIGHT = 12;
-export const OUTER_CONTENT_HEIGHT = 450;
+export const REGULAR_WIDTH = "300px";
+export const REGULAR_HEIGHT = "120px";
+export const SHRUNK_WIDTH = "30px";
+export const SHRUNK_HEIGHT = "12px";
+export const OUTER_CONTENT_HEIGHT = "450px";
 
 export const dragItemsArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 

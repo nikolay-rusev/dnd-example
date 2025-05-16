@@ -128,7 +128,7 @@ export default function DragNDrop() {
                 style={{ height: OUTER_CONTENT_HEIGHT, backgroundColor: "mediumaquamarine" }}
             ></div>
             <div className="dnd-container" ref={containerRef} style={{ position: "relative" }}>
-                <div className="top-fill" style={{ height: topFillHeight }}></div>
+                <div className="top-fill" style={{ height: topFillHeight + "px" }}></div>
                 <div id="dnd-context-container" className="dnd-context-container">
                     <div
                         id="actual-container"
@@ -153,7 +153,7 @@ export default function DragNDrop() {
                         {dummyChildren}
                     </div>
                 </div>
-                <div className="bottom-fill" style={{ height: bottomFillHeight }}></div>
+                <div className="bottom-fill" style={{ height: bottomFillHeight + "px" }}></div>
             </div>
             <div
                 style={{ height: OUTER_CONTENT_HEIGHT, backgroundColor: "mediumaquamarine" }}
