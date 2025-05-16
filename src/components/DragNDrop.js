@@ -13,7 +13,8 @@ import { calculateFillHeights } from "../utils/calc";
 import { SortableItem } from "./SortableItem";
 import "./DragNDrop.css";
 
-export const itemsArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const topHandle = true;
+const itemsArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 export default function DragNDrop() {
     const [items, setItems] = useState(itemsArray);
@@ -28,7 +29,7 @@ export default function DragNDrop() {
         // scroll offset on y
         const scrollOffset = window.scrollY;
         console.log("scrollOffset", scrollOffset);
-        const { top, bottom } = calculateFillHeights({ event, containerRef });
+        const { top, bottom } = calculateFillHeights({ event, containerRef, topHandle });
 
         setTopFillHeight(top);
         setBottomFillHeight(bottom);

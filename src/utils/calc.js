@@ -1,6 +1,6 @@
 import { getActualElementHeight } from "./helpers";
 
-export const calculateFillHeights = ({ event, containerRef }) => {
+export const calculateFillHeights = ({ event, containerRef, topHandle }) => {
     const scrollOffset = window.scrollY;
 
     // Capture the original container height
@@ -61,7 +61,8 @@ export const calculateFillHeights = ({ event, containerRef }) => {
     // radio for calculating the mouse point in shrunk element
     const ratio = mouseYInRectangle / draggedElementHeight;
     console.log("ratio", ratio);
-    const topCompensation = mouseY - shrinkHeight - ratio * shrinkElementHeight;
+    const handleAdjustment = topHandle ? mouseYInRectangle : ratio * shrinkElementHeight;
+    const topCompensation = mouseY - shrinkHeight - handleAdjustment;
     console.log("topCompensation", topCompensation);
 
     // easy
