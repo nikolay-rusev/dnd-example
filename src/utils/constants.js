@@ -2,14 +2,12 @@ export const TIMEOUT = 0;
 export const TIMEOUT_SCROLL = 200;
 export const REGULAR_WIDTH = "300px";
 export const REGULAR_HEIGHT = "120px";
-export const SHRUNK_WIDTH = "30px";
 export const SHRUNK_HEIGHT = "12px";
 export const OUTER_CONTENT_HEIGHT = "450px";
 export const TRANSITION = "all 0.3s ease"
 
-
 export const shrinkContainerStyle = {
-    visibility: "visible",
+    visibility: "hidden",
     position: "absolute",
     top: 0,
     right: 0
@@ -39,6 +37,5 @@ export const defaultItemStyle = {
 
 export const dummyItemStyle = {
     ...defaultItemStyle,
-    width: SHRUNK_WIDTH,
     height: SHRUNK_HEIGHT
 };
