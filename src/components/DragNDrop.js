@@ -18,7 +18,7 @@ const topHandle = true;
 const allowBottomCompensation = true;
 const itemsArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-export default function DragNDrop() {
+const DragNDrop = () => {
     const [items, setItems] = useState(itemsArray);
     const [activeId, setActiveId] = useState(null);
     const containerRef = useRef(null);
@@ -132,7 +132,7 @@ export default function DragNDrop() {
                 {allowBottomCompensation && (
                     <div
                         className="bottom-fill"
-                        style={{ transition: TRANSITION, height: bottomFillHeight  }}
+                        style={{ transition: TRANSITION, height: bottomFillHeight }}
                     ></div>
                 )}
             </div>
@@ -142,4 +142,6 @@ export default function DragNDrop() {
             ></div>
         </>
     );
-}
+};
+
+export default DragNDrop;

@@ -17,7 +17,7 @@ export const calcItemStyle = ({ activeId, transform, last }) => {
     };
 };
 
-export function SortableItem({ id, activeId, dummy, last, className }) {
+export const SortableItem = ({ id, activeId, dummy, last, className }) => {
     const { attributes, setNodeRef, transform, listeners } = useSortable({ id });
 
     // last item has no bottom margin
@@ -41,4 +41,4 @@ export function SortableItem({ id, activeId, dummy, last, className }) {
             {id}
         </div>
     );
-}
+};
