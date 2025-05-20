@@ -6,11 +6,12 @@ import {
     REGULAR_HEIGHT,
     SHRUNK_HEIGHT
 } from "../utils/constants";
+import { getRandomInt } from "../utils/helpers";
 
 export const calcItemStyle = ({ activeId, transform, last }) => {
     return {
         ...defaultItemStyle,
-        height: activeId ? SHRUNK_HEIGHT : REGULAR_HEIGHT,
+        height: activeId ? SHRUNK_HEIGHT : REGULAR_HEIGHT + getRandomInt(300),
         transform: `translate(${transform?.x ?? 0}px, ${transform?.y ?? 0}px)`,
         marginBottom: last ? 0 : 8
     };

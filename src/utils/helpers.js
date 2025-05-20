@@ -17,3 +17,7 @@ export const scrollAfterDragEnd = (id) => {
         });
     }, TIMEOUT_SCROLL); // Slight delay to allow transition
 };
+
+export function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+}
