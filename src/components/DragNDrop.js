@@ -103,7 +103,7 @@ export default function DragNDrop() {
             <div className="dnd-container" ref={containerRef} style={{ position: "relative" }}>
                 <div
                     className="top-fill"
-                    style={{ transition: TRANSITION, height: topFillHeight + "px" }}
+                    style={{ transition: TRANSITION, height: topFillHeight }}
                 ></div>
                 <div id="dnd-context-container" className="dnd-context-container">
                     <div
@@ -132,7 +132,7 @@ export default function DragNDrop() {
                 {allowBottomCompensation && (
                     <div
                         className="bottom-fill"
-                        style={{ transition: TRANSITION, height: bottomFillHeight + "px" }}
+                        style={{ transition: TRANSITION, height: bottomFillHeight  }}
                     ></div>
                 )}
             </div>

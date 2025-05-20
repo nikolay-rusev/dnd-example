@@ -12,7 +12,7 @@ export const calcItemStyle = ({ activeId, transform, last }) => {
         ...defaultItemStyle,
         height: activeId ? SHRUNK_HEIGHT : REGULAR_HEIGHT,
         transform: `translate(${transform?.x ?? 0}px, ${transform?.y ?? 0}px)`,
-        marginBottom: last ? 0 : "8px"
+        marginBottom: last ? 0 : 8
     };
 };
 
