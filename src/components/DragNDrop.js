@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { DndContext, DragOverlay, MeasuringStrategy, pointerWithin } from "@dnd-kit/core";
-import { restrictToVerticalAxis, snapCenterToCursor } from "@dnd-kit/modifiers";
+// import { restrictToVerticalAxis, snapCenterToCursor } from "@dnd-kit/modifiers";
 import { arrayMove, SortableContext } from "@dnd-kit/sortable";
 import {
     OUTER_CONTENT_HEIGHT,
@@ -78,7 +78,8 @@ export default function DragNDrop() {
                         />
                     ))}
                 </SortableContext>
-                <DragOverlay modifiers={[snapCenterToCursor, restrictToVerticalAxis]}>
+                {/*<DragOverlay modifiers={[snapCenterToCursor, restrictToVerticalAxis]}>*/}
+                <DragOverlay modifiers={[]}>
                     {activeId ? (
                         <SortableItem
                             id={activeId}
